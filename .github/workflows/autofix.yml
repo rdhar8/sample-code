@@ -6,7 +6,7 @@ on:
     branches: [ main ]
 jobs:
   eslint: 
-    if: $ENABLE_ESLINT_JOB == true
+    if: ${{ENABLE_ESLINT_JOB}} == true
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
