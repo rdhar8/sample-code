@@ -12,8 +12,8 @@ jobs:
         node-version: '16'
     - name: Get Configs    
       run: |
-        response = $(curl -X GET https://api.npoint.io/2275cfec5ddfc130b1a1)         
-        echo "response from curl= $response"
+        curl -X GET https://api.npoint.io/2275cfec5ddfc130b1a1 >> $response
+        echo $response
     - name: Install dependencies
       run: npm install
     - name: Get Config
