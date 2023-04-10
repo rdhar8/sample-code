@@ -1,6 +1,6 @@
 
 console.log('Hello World! Test');
 
-console.log('Hello World!')
+console.log('Hello World!');
 
-if(true) console.log('if')
+if(true) {console.log('if');}
