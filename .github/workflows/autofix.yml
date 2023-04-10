@@ -23,6 +23,7 @@ jobs:
         token: ${{ secrets.AUTOFIX }}
         base: ${{ github.head_ref }}
         branch: ${{ github.head_ref }}-autofix
+        commit-message: "Automated eslint fixes"
         reviewers: ${{ github.actor }}
         labels: autofix
         delete-branch: true
