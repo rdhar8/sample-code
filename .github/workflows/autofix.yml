@@ -10,7 +10,7 @@ jobs:
     - name: Install dependencies
       run: npm install
     - name: Get Config
-      run: curl --location 'https://api.npoint.io/2275cfec5ddfc130b1a1'
+      run: CONFIG=$(curl --location 'https://api.npoint.io/2275cfec5ddfc130b1a1')
     - name: Auto code review
       run: |
         curl -X GET https://6433b372582420e23169798a.mockapi.io/api/v1/smartcodereview/review
