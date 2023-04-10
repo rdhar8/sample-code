@@ -26,7 +26,7 @@ module.exports = {
   reserveID: async (req, res) => {
     var bookid = req.param('id');
     var user = req.param('userid');
-    let book = await BookList.update({ id: bookid }).set( { issuestatus: true, userid: user }).fetch();
+    let book = await BookList.update({ id: bookid });
     if (book.length > 0) {
       let updatedBook = await BookList.find({ id: bookid });
       return res.send(updatedBook);
