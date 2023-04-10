@@ -1,0 +1,22 @@
+{
+  "name": "sample-code",
+  "version": "1.0.0",
+  "description": "Sample code for R&amp;D",
+  "main": "test.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rdhar8/sample-code.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rdhar8/sample-code/issues"
+  },
+  "homepage": "https://github.com/rdhar8/sample-code#readme",
+  "devDependencies": {
+    "eslint": "^8.38.0"
+  }
+}
