@@ -18,8 +18,7 @@ jobs:
         echo "FORMATTER=$FORMATTER" >> $GITHUB_ENV
     - name: Auto code review
       run: |
-        echo $ESLINT
-        echo $FORMATTER
+        echo ${{ env.ESLINT }}
         curl -X GET https://6433b372582420e23169798a.mockapi.io/api/v1/smartcodereview/review
     - name: Lint & fix
       if: env.ESLINT == true
