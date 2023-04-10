@@ -21,10 +21,10 @@ jobs:
         echo $FORMATTER
         curl -X GET https://6433b372582420e23169798a.mockapi.io/api/v1/smartcodereview/review
     - name: Lint & fix
-      if: $ESLINT
+      if: $ESLINT == 'true'
       run: npx eslint . --fix --ext .js
     - name: Create Pull Request
-      if: $ESLINT
+      if: $ESLINT == 'true'
       uses: peter-evans/create-pull-request@v3
       with:
         token: ${{ secrets.AUTOFIX }}
