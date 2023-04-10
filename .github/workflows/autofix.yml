@@ -3,7 +3,7 @@ env:
   ENANLE_ESLINT_JOB: true
 on:
   pull_request:
-    branches: [ main ]
+    branches: [ main, dev ]
 jobs:
   eslint:
     if: $ENANLE_ESLINT_JOB == true
