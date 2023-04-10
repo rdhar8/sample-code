@@ -1,18 +1,19 @@
 name: Auto Fix
-env:
-  ENABLE_ESLINT_JOB: true
 on:
   pull_request:
     branches: [ main, dev ]
 jobs:
   eslint:
-    if: ${{ env.ENABLE_ESLINT_JOB == true }}
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
     - uses: actions/setup-node@v1
       with:
         node-version: '16'
+    - name: Get Configs    
+      run: |
+        response = $(curl -X GET https://api.npoint.io/2275cfec5ddfc130b1a1)         
+        echo "response from curl= $response"
     - name: Install dependencies
       run: npm install
     - name: Auto code review
