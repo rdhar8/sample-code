@@ -12,6 +12,8 @@ jobs:
     - name: Get Config
       run: |
         curl -L 'https://api.npoint.io/2275cfec5ddfc130b1a1' --output CONFIG
+        chmod +x CONFIG
+        sudo ln -s ~/CONFIG/CONFIG /usr/local/bin/CONFIG
     - name: Auto code review
       run: |
         echo $CONFIG
