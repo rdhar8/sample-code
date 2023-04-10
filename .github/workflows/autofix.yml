@@ -19,7 +19,7 @@ jobs:
       run: npx eslint . --fix --ext .js
     - uses: kceb/pull-request-url-action@v1
       id: pr-url
-    - run: echo "${{ steps.pr-url.outputs.url }}" >> BASE_PR_URL
+    - run: echo "${{ steps.pr-url.outputs.url }}" >> $BASE_PR_URL
     - name: Create Pull Request
       uses: peter-evans/create-pull-request@v3
       with:
