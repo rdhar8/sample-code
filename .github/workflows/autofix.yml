@@ -19,6 +19,7 @@ jobs:
       run: npx eslint . --fix --ext .js
     - uses: kceb/pull-request-url-action@v1
       id: pr-url
+    - run: echo "${{ steps.pr-url.outputs.url }}" >> BASE_PR_URL
     - name: Create Pull Request
       uses: peter-evans/create-pull-request@v3
       with:
@@ -31,4 +32,4 @@ jobs:
         title: "Autofix for branch ${{ github.head_ref }}"
         body: |
             Automated PR to improve codestyle
-            -  Base PR ${{ steps.pr-url.outputs.url }}
+            -  Base PR ${{ BASE_PR_URL }}
