@@ -21,7 +21,7 @@ jobs:
         echo ${{ env.ESLINT }}
         curl -X GET https://6433b372582420e23169798a.mockapi.io/api/v1/smartcodereview/review
     - name: Lint & fix
-      if: env.ESLINT == true
+      if: ${{ env.ESLINT == 'true' }}
       run: npx eslint . --fix --ext .js
     - name: Create Pull Request
       if: ${{ env.ESLINT == 'true' }}
