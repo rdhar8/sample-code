@@ -21,9 +21,10 @@ jobs:
       uses: peter-evans/create-pull-request@v3
       with:
         token: ${{ secrets.AUTOFIX }}
+        base: ${{ github.ref_name }}
         branch: ${{ github.ref_name }}-autofix
         reviewers: ${{ github.actor }}
         labels: autofix
         delete-branch: true
-        title: "Improve codestyle"
+        title: "Autofix for branch ${{ github.ref_name }}"
         body: "Automated PR to improve codestyle"
