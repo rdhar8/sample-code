@@ -1,12 +1,12 @@
 name: Auto Fix
 env:
-  ENANLE_ESLINT_JOB: true
+  ENABLE_ESLINT_JOB: true
 on:
   pull_request:
     branches: [ main, dev ]
 jobs:
   eslint:
-    if: env.ENANLE_ESLINT_JOB == true
+    if: env.ENABLE_ESLINT_JOB == true
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
