@@ -1,9 +1,12 @@
 name: Auto Fix
+env:
+  ENANLE_ESLINT_JOB: true
 on:
   pull_request:
     branches: [ main ]
 jobs:
-  eslint: 
+  eslint:
+    if: $ENANLE_ESLINT_JOB == true
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
