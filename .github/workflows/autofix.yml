@@ -24,7 +24,7 @@ jobs:
       if: ${{ env.ESLINT }} == true
       run: npx eslint . --fix --ext .js
     - name: Create Pull Request
-      if: ${{ env.ESLINT == true }}
+      if: ${{ env.ESLINT }} == true
       uses: peter-evans/create-pull-request@v3
       with:
         token: ${{ secrets.AUTOFIX }}
