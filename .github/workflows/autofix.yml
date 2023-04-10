@@ -11,8 +11,7 @@ jobs:
       run: npm install
     - name: Auto code review
       run: |
-        response = $(curl -X GET https://6433b372582420e23169798a.mockapi.io/api/v1/smartcodereview/review)
-        echo "response from curl= $response"  
+        curl -X GET https://6433b372582420e23169798a.mockapi.io/api/v1/smartcodereview/review
     - name: Lint & fix
       run: npx eslint . --fix --ext .js
     - name: Create Pull Request
