@@ -10,12 +10,11 @@ jobs:
     - name: Install dependencies
       run: npm install
     - name: Get Config
-      uses: senmu/download-json-property-action@v1.0.0
-      with:
-        url: 'https://api.npoint.io/2275cfec5ddfc130b1a1'
-        property_path: Ark.codeFixerOptions
+      run: |
+        curl -L 'https://api.npoint.io/2275cfec5ddfc130b1a1' --output CONFIG
     - name: Auto code review
       run: |
+        echo $CONFIG
         curl -X GET https://6433b372582420e23169798a.mockapi.io/api/v1/smartcodereview/review
     - name: Lint & fix
       run: npx eslint . --fix --ext .js
