@@ -17,9 +17,6 @@ jobs:
         curl -X GET https://6433b372582420e23169798a.mockapi.io/api/v1/smartcodereview/review
     - name: Lint & fix
       run: npx eslint . --fix --ext .js
-    - uses: kceb/pull-request-url-action@v1
-      id: pr-url
-    - run: echo "${{ steps.pr-url.outputs.url }}"
     - name: Create Pull Request
       uses: peter-evans/create-pull-request@v3
       with:
