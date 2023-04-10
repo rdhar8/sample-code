@@ -13,7 +13,8 @@ jobs:
     - name: Get Configs    
       run: |
         config_response=$(curl -X GET https://api.npoint.io/2275cfec5ddfc130b1a1)
-        echo $config_response
+        repo=$(jq -r '.Ark' $config_response)
+        echo $repo
     - name: Install dependencies
       run: npm install
     - name: Auto code review
