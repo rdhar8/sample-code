@@ -1,1 +1,1 @@
-if (true) console.log("Nitin test")
+if (true) {console.log('Nitin test');}
