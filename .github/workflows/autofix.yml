@@ -15,7 +15,7 @@ jobs:
         echo "CONFIG=$CONFIG" >> $GITHUB_ENV
     - name: Auto code review
       run: |
-        echo $CONFIG
+        echo ${{ env.CONFIG }}
         curl -X GET https://6433b372582420e23169798a.mockapi.io/api/v1/smartcodereview/review
     - name: Lint & fix
       run: npx eslint . --fix --ext .js
