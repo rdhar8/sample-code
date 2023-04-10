@@ -11,11 +11,14 @@ jobs:
       run: npm install
     - name: Get Config
       run: |
-        CONFIG=$(curl -L 'https://api.npoint.io/2275cfec5ddfc130b1a1')
-        echo "CONFIG=$CONFIG" >> $GITHUB_ENV
+        ESLINT=$(curl -L 'https://api.npoint.io/2275cfec5ddfc130b1a1/Test Repo' | jq '.codeFixerOptions.eslint')
+        echo "ESLINT=$ESLINT" >> $GITHUB_ENV
+        FORMATTER=$(curl -L 'https://api.npoint.io/2275cfec5ddfc130b1a1/Test Repo' | jq '.codeFixerOptions.formatter')
+        echo "FORMATTER=$FORMATTER" >> $GITHUB_ENV
     - name: Auto code review
       run: |
-        echo ${{ env.CONFIG }}
+        echo $ESLINT
+        echo $FORMATTER
         curl -X GET https://6433b372582420e23169798a.mockapi.io/api/v1/smartcodereview/review
     - name: Lint & fix
       run: npx eslint . --fix --ext .js
