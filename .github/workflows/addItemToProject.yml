@@ -149,7 +149,7 @@ jobs:
       - name: 'Set Fields For Code Re-review'
         env:
           GITHUB_TOKEN: ${{ secrets.PR_TOKEN }}
-        if: ${{ github.event.action == 'review_requested' && github.event.pull_request.review_comments > 1}}
+        if: github.event.action == 'review_requested' && github.event.pull_request.review_comments > 1
         run: |
           gh api graphql -f query='
             mutation (
