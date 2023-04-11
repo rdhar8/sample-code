@@ -126,8 +126,8 @@ jobs:
       - name: 'Set Fields For Open State'
         env:
           GITHUB_TOKEN: ${{ secrets.PR_TOKEN }}
-          NBR_REVIEWERS: echo '${{ toJSON(github.event) }}' | jq '.pull_request.requested_reviewers | length'
-        if: ${{ github.event.action == 'review_request_removed' &&  env.NBR_REVIEWERS == 0 }}
+          NBR_REVIEWERS: ${{ echo '${{ toJSON(github.event) }}' | jq '.pull_request.requested_reviewers | length' }}
+        if: github.event.action == 'review_request_removed' && env.NBR_REVIEWERS == 0 
         run: |
           gh api graphql -f query='
             mutation (
