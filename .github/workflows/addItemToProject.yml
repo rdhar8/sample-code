@@ -2,7 +2,7 @@ name: Add PR to project
 on:
   pull_request:
     types:
-      - [review_requested, review_requested_removed]
+      - [open, review_requested, review_requested_removed]
 jobs:
   track_pr:
     runs-on: ubuntu-latest
