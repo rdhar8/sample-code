@@ -42,42 +42,6 @@ jobs:
                   }
                 }
               }
-            }' -f user=$USER -F number=$PROJECT_NUMBER > project_data.json
-            echo 'PROJECT_ID='$(jq '.data.user.projectV2.id' project_data.json) >> $GITHUB_ENV
-
-            echo 'Execution success' 
-            echo ${{ env.PROJECT_ID }}
-
-      - name: Get Items data
-        env:
-          GITHUB_TOKEN: ${{ secrets.PR_TOKEN }}
-          USER: rdhar8
-          PROJECT_NUMBER: 1
-        run: |
-          gh api graphql -f query='
-            query($projectId: ID!) {
-              node(id: $projectId){
-                ... on ProjectV2 {
-                  items(first: 20) {
-                    nodes{
-                      id
-                      content{
-                        ...on PullRequest {
-                          title
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }' -f projectId=$PROJECT_ID > items_data.json
-
-            echo 'ITEM_ID='$(jq '.data.node.items.nodes[] | select(.content.title == ${{ toJSON(github.event.pull_request.title) }}) | .id' items_data.json) >> $GITHUB_ENV
-
-            echo 'Execution success 2' 
-            echo ${{ env.ITEM_ID }}
-      
-      - name: 'Dump Item Id'
-        run: echo ${{ env.ITEM_ID }}
+            }' -f user=$USER -F number=$PROJECT_NUMBER | jq
 
 
