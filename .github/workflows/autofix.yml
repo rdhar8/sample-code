@@ -58,7 +58,7 @@ jobs:
             "pr_num": "${{ github.event.pull_request.number }}",
             "repo": "sample-code",
             "owner": "${{ github.event.pull_request.head.repo.owner.login }}",
-            "reviewer": '"$models"'
+            "reviewer": '"$model"'
           }'
     - name: Lint & fix
       if: ${{ env.ESLINT == 'true' }}
