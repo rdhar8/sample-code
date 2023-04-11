@@ -18,7 +18,7 @@ jobs:
       - name: Print Secret
         env:
           JIRA_TOKEN: '${{ secrets.JIRA_TOKEN }}'
-        run: echo 'token $JIRA_TOKEN'
+        run: echo ${{ env.JIRA_TOKEN }}
       - name: Pull Jira information
         env:
           JIRA_TOKEN: '${{ secrets.JIRA_TOKEN }}'
