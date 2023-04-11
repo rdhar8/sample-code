@@ -2,7 +2,7 @@ name: Add PR to project
 on:
   pull_request:
     types:
-      - [assigned, unassigned]
+      - [review_requested, review_requested_removed]
 jobs:
   track_pr:
     runs-on: ubuntu-latest
