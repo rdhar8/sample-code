@@ -97,7 +97,7 @@ jobs:
       - name: 'Set Fields For Code Review'
         env:
           GITHUB_TOKEN: ${{ secrets.PR_TOKEN }}
-        if: ${{ github.event.action == 'review_requested'}}
+        if: ${{ github.event.action == 'review_requested' && github.event.pull_request.review_comments == 0}}
         run: |
           gh api graphql -f query='
             mutation (
@@ -145,4 +145,30 @@ jobs:
                   }
               }
             }' -f project=$PROJECT_ID -f item=$ITEM_ID -f status_field=$STATUS_FIELD_ID -f status_value=${{ env.STATUS_FIELD_VALUE_OPEN }}
+      
+      - name: 'Set Fields For Code Re-review'
+        env:
+          GITHUB_TOKEN: ${{ secrets.PR_TOKEN }}
+        if: ${{ github.event.action == 'review_requested' && github.event.pull_request.review_comments > 1}}
+        run: |
+          gh api graphql -f query='
+            mutation (
+              $project: ID!
+              $item: ID!
+              $status_field: ID!
+              $status_value: String!
+            ) {
+              set_status: updateProjectV2ItemFieldValue(input: {
+                projectId: $project
+                itemId: $item
+                fieldId: $status_field
+                value: {
+                  singleSelectOptionId: $status_value
+                  }
+              }) {
+                projectV2Item {
+                  id
+                  }
+              }
+            }' -f project=$PROJECT_ID -f item=$ITEM_ID -f status_field=$STATUS_FIELD_ID -f status_value=${{ env.STATUS_FIELD_VALUE_CODE_REREVIEW }}
 
