@@ -25,6 +25,6 @@ jobs:
         run: >
           curl --location --request GET
           'https://jira.nutanix.com/rest/api/latest/issue/SAAS-20750' --header
-          "Authorization: Bearer $JIRA_TOKEN" | jq
+          "Authorization: Bearer ${{ env.JIRA_TOKEN }}" | jq
       - name: Print Jira information
         run: echo "The output was $JIRA_STTAUS and $JIRA_SPRINT"
