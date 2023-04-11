@@ -18,5 +18,5 @@ jobs:
         with:
           audit_level: moderate
           github_token: ${{ secrets.AUTOFIX }}
-          issue_labels: vulnerability,test
+          issue_labels: vulnerability
           dedupe_issues: true
