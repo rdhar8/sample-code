@@ -13,7 +13,55 @@ jobs:
       with:
         node-version: '16'
     - name: Install dependencies
-      run: echo "Nitin"
+      run: npm install
+    - name: Get Config
+      run: |
+        ESLINT=$(curl -L 'https://api.npoint.io/2275cfec5ddfc130b1a1/Test%20Repo' | jq '.codeFixerOptions.eslint')
+        echo "ESLINT=$ESLINT" >> $GITHUB_ENV
+        echo "::set-env ESLINT=$ESLINT"
+        FORMATTER=$(curl -L 'https://api.npoint.io/2275cfec5ddfc130b1a1/Test%20Repo' | jq '.codeFixerOptions.formatter')
+        echo "FORMATTER=$FORMATTER" >> $GITHUB_ENV
+        CHATGPT=$(curl -L 'https://api.npoint.io/2275cfec5ddfc130b1a1/Test%20Repo' | jq '.codeReviewOptions.chatGPT')
+        MICROSOFT=$(curl -L 'https://api.npoint.io/2275cfec5ddfc130b1a1/Test%20Repo' | jq '.codeReviewOptions.microsoft')
+        INHOUSE=$(curl -L 'https://api.npoint.io/2275cfec5ddfc130b1a1/Test%20Repo' | jq '.codeReviewOptions.inHouse')
+        echo "CHATGPT=$CHATGPT" >> $GITHUB_ENV
+        echo "::set-env CHATGPT=$CHATGPT"
+        echo "MICROSOFT=$MICROSOFT" >> $GITHUB_ENV
+        echo "::set-env MICROSOFT=$MICROSOFT"
+        echo "INHOUSE=$INHOUSE" >> $GITHUB_ENV
+        echo "::set-env INHOUSE=$INHOUSE"
+    - name: Auto code review
+      run: |
+        echo ${{ env.ESLINT }}
+        echo ${GITHUB_REPOSITORY#*/}
+        pull_number=$(jq --raw-output .pull_request.number "$GITHUB_EVENT_PATH")
+        echo $pull_number
+        echo ${{ env.CHATGPT }}
+        Y=()
+        if [ ${{ env.CHATGPT }} == 'true' ]
+        then
+           Y+=("eslint")
+        fi
+        if [ ${{ env.MICROSOFT }} == 'true' ]
+        then
+           Y+=("microsoft")
+        fi
+        if [ ${{ env.INHOUSE }} == 'true' ]
+        then
+           Y+=("in-house")
+        fi
+        
+        models=$(printf '%s\n' "${Y[@]}" | jq -R . | jq -s . )
+        echo $models
+        # curl -X GET https://6433b372582420e23169798a.mockapi.io/api/v1/smartcodereview/review
+        curl --location --request POST 'http://3.237.195.232:3001/add-review-comments' \
+          --header 'Content-Type: application/json' \
+          --data-raw '{
+            "pr_num": "${{ github.event.pull_request.number }}",
+            "repo": "sample-code",
+            "owner": "${{ github.event.pull_request.head.repo.owner.login }}",
+            "reviewer": '"$models"'
+          }'
   smart-code-review1: 
     runs-on: ubuntu-latest
     steps:
