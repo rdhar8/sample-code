@@ -9,12 +9,12 @@ jobs:
       - name: Get project data
         env:
           GITHUB_TOKEN: ${{ secrets.PR_TOKEN }}
-          ORGANIZATION: rdhar8
+          USER: rdhar8
           PROJECT_NUMBER: 1
         run: |
           gh api graphql -f query='
-            query($org: String!, $number: Int!) {
-              organization(login: $org){
+            query($user: String!, $number: Int!) {
+              user(login: $user){
                 projectV2(number: $number) {
                   id
                   fields(first:20) {
@@ -35,6 +35,6 @@ jobs:
                   }
                 }
               }
-            }' -f org=$ORGANIZATION -F number=$PROJECT_NUMBER | jq
+            }' -f user=$USER -F number=$PROJECT_NUMBER | jq
 
             echo 'Execution success'
