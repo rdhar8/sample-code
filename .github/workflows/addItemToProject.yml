@@ -95,7 +95,7 @@ jobs:
         run: echo ${{ env.STATUS_FIELD_VALUE_CODE_REREVIEW }}
 
       - name: 'Dump reviewers length'
-        run: echo ${{ toJSON(github.event) }} | jq '.requested_reviewers | length'
+        run: echo '${{ toJSON(github.event) }}' | jq '.requested_reviewers | length'
 
       - name: 'Set Fields For Code Review'
         env:
