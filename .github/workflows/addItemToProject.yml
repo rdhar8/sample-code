@@ -113,6 +113,6 @@ jobs:
                   id
                   }
               }
-            }' -f project=$PROJECT_ID -f item=$ITEM_ID -f status_field=$STATUS_FIELD_ID -f status_value=$STATUS_FIELD_VALUE -f
+            }' -f project=$PROJECT_ID -f item=$ITEM_ID -f status_field=$STATUS_FIELD_ID -f status_value=$STATUS_FIELD_VALUE
 
 
