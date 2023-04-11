@@ -7,7 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: 'Dump github content'
-        run: echo '${{ toJSON(github.event) }}' | jq
+        run: echo '${{ toJSON(github.event.data) }}' | jq
         shell: bash
 
       - name: Get project data
@@ -42,7 +42,7 @@ jobs:
             }' -f user=$USER -F number=$PROJECT_NUMBER > project_data.json
             echo 'PROJECT_ID='$(jq '.data.user.projectV2.id' project_data.json) >> $GITHUB_ENV
 
-            echo 'Execution success $PROJECT_ID'
+            echo 'Execution success' ${{ env.PROJECT_ID }}
 
       - name: Get Items data
         env:
@@ -66,5 +66,11 @@ jobs:
                   }
                 }
               }
-            }' -f projectId=$PROJECT_ID | jq
+            }' -f projectId=$PROJECT_ID > items_data.json
+
+            echo 'ITEM_ID='$(jq '.data.node.items.nodes[] | select(.content.title == "Riya Test") | .id' items_data.json) >> $GITHUB_ENV
+
+            echo 'Execution success' ${{ env.ITEM_ID }}
+
+
 
