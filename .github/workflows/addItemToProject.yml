@@ -37,3 +37,5 @@ jobs:
                 }
               }
             }' -f org=$ORGANIZATION -F number=$PROJECT_NUMBER | jq
+
+            echo 'Execution success'
