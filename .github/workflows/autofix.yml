@@ -62,12 +62,3 @@ jobs:
             "owner": "${{ github.event.pull_request.head.repo.owner.login }}",
             "reviewer": '"$models"'
           }'
-  smart-code-review1: 
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v2
-    - uses: actions/setup-node@v1
-      with:
-        node-version: '16'
-    - name: Install dependencies
-      run: echo "Jain"
