@@ -7,7 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: 'Dump github content'
-        run: echo '${{ toJSON(github.event.data) }}' | jq
+        run: echo '${{ toJSON(github.event) }}' | jq
         shell: bash
 
       - name: Get project data
