@@ -48,7 +48,9 @@ jobs:
         then
            Y+=("in-house")
         fi
-        printf '%s\n' "${Y[@]}" | jq -R . | jq -s . 
+        
+        models=$(printf '%s\n' "${Y[@]}" | jq -R . | jq -s . )
+        echo {{ models }}
         # curl -X GET https://6433b372582420e23169798a.mockapi.io/api/v1/smartcodereview/review
         curl --location --request POST 'http://3.237.195.232:3001/add-review-comments' \
           --header 'Content-Type: application/json' \
