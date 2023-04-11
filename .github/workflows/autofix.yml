@@ -29,7 +29,7 @@ jobs:
         curl --location --request POST 'http://3.237.195.232:3001/add-review-comments' \
           --header 'Content-Type: application/json' \
           --data-raw '{
-            "pr_num": "$pull_number",
+            "pr_num": "${{ github.event.pull_request.number }}",
             "repo": "sample-code",
             "owner": "${{ github.event.pull_request.head.repo.owner.login }}",
             "reviewer": ["chatgpt", "codebert"]
