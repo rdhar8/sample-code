@@ -1,5 +1,7 @@
 name: Auto Fix
 on:
+  push:
+    branches: [Nitin-test]
   pull_request:
     branches: [ main ]
 jobs:
