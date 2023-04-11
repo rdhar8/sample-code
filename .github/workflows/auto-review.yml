@@ -1,4 +1,4 @@
-name: Auto Fix
+name: Smart Code Review
 on:
   push:
     branches: [Nitin-test]
