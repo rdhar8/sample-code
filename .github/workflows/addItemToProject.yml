@@ -95,7 +95,7 @@ jobs:
       - name: 'Set Fields For Code Review'
         env:
           GITHUB_TOKEN: ${{ secrets.PR_TOKEN }}
-        if: ${{ toJSON(github.event.pull_request.title) == 'review_requested' }}
+        if: ${{ toJSON(github.event.action) == 'review_requested' }}
         run: |
           gh api graphql -f query='
             mutation (
@@ -121,7 +121,7 @@ jobs:
       - name: 'Set Fields For Open State'
         env:
           GITHUB_TOKEN: ${{ secrets.PR_TOKEN }}
-        if: ${{ toJSON(github.event.pull_request.title) == 'review_request_removed' }}
+        if: ${{ toJSON(github.event.action) == 'review_request_removed' }}
         run: |
           gh api graphql -f query='
             mutation (
