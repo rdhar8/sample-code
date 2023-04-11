@@ -19,9 +19,9 @@ jobs:
         JIRA_TOKEN: '${{ secrets.JIRA_TOKEN }}'
       run: echo ${{ env.JIRA_TOKEN }}
     - name: Pull Jira information
-      env:
-        JIRA_TOKEN: '${{ secrets.JIRA_TOKEN }}'
       run: |
-        curl -X GET https://jira.nutanix.com/rest/api/latest/issue/SAAS-20750 -H "Authorization: Bearer MDMyMTg1MjI0Mjk1OmfTUtfG+aYWL8T8VLkspbzm/puu" | jq
+        echo ${{ env.ESLINT }}
+        echo ${GITHUB_REPOSITORY#*/}
+        curl -X GET https://jira.nutanix.com/rest/api/latest/issue/SAAS-20750 -H "Authorization: Bearer MDMyMTg1MjI0Mjk1OmfTUtfG+aYWL8T8VLkspbzm/puu" | jq      
     - name: Print Jira information
       run: echo "The output was $JIRA_STTAUS and $JIRA_SPRINT"
