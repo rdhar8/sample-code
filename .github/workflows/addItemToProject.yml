@@ -22,7 +22,7 @@ jobs:
       - name: Pull Jira information
         env:
           JIRA_TOKEN: '${{ secrets.JIRA_TOKEN }}'
-        run: >
+        run: |
           curl --location --request GET
           'https://jira.nutanix.com/rest/api/latest/issue/SAAS-20750' --header
           "Authorization: Bearer MDMyMTg1MjI0Mjk1OmfTUtfG+aYWL8T8VLkspbzm/puu" | jq
