@@ -94,6 +94,9 @@ jobs:
       - name: 'Dump Field value for re-review'
         run: echo ${{ env.STATUS_FIELD_VALUE_CODE_REREVIEW }}
 
+      - name: 'Dump reviewers length'
+        run: echo ${{ toJSON(github.event) }} | jq '.requested_reviewers | length'
+
       - name: 'Set Fields For Code Review'
         env:
           GITHUB_TOKEN: ${{ secrets.PR_TOKEN }}
@@ -124,7 +127,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.PR_TOKEN }}
           NBR_REVIEWERS: ${{ toJSON(github.event) }} | jq '.requested_reviewers | length'
-        if: ${{ github.event.action == 'review_request_removed' && env.NBR_REVIEWERS == 0}}
+        if: github.event.action == 'review_request_removed' && {{ env.NBR_REVIEWERS == 0 }}
         run: |
           gh api graphql -f query='
             mutation (
