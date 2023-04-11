@@ -22,7 +22,7 @@ jobs:
         CHATGPT=$(curl -L 'https://api.npoint.io/2275cfec5ddfc130b1a1/Test%20Repo' | jq '.codeReviewOptions.chatGPT')
         MICROSOFT=$(curl -L 'https://api.npoint.io/2275cfec5ddfc130b1a1/Test%20Repo' | jq '.codeReviewOptions.microsoft')
         INHOUSE=$(curl -L 'https://api.npoint.io/2275cfec5ddfc130b1a1/Test%20Repo' | jq '.codeReviewOptions.inHouse')
-        echo "CHATGPT=$CHATGPT" >> $GITHUB_ENV
+        echo "::set-env CHATGPT=$CHATGPT"
         echo "MICROSOFT=$MICROSOFT" >> $GITHUB_ENV
         echo "INHOUSE=$INHOUSE" >> $GITHUB_ENV
     - name: Auto code review
