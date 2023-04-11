@@ -44,7 +44,10 @@ jobs:
               }
             }' -f user=$USER -F number=$PROJECT_NUMBER > project_data.json
             echo 'PROJECT_ID='$(jq '.data.user.projectV2.id' project_data.json) >> $GITHUB_ENV
-            echo 'FIELD_ID='$(jq '.data.user.projectV2.fields.nodes[] | select(.name == "Status").options[] | select(.name == "Comments Added").id' project_data.json) >> $GITHUB_ENV
+
+            echo 'STATUS_FIELD_ID='$(jq '.data.user.projectV2.fields.nodes[] | select(.name == "Status").id' project_data.json) >> $GITHUB_ENV
+
+            echo 'STATUS_FIELD_VALUE='$(jq '.data.user.projectV2.fields.nodes[] | select(.name == "Status").options[] | select(.name == "Comments Added").id' project_data.json) >> $GITHUB_ENV
 
             echo 'Execution success' 
             echo ${{ env.PROJECT_ID }}
@@ -82,6 +85,9 @@ jobs:
         run: echo ${{ env.ITEM_ID }}
 
       - name: 'Dump Field Id'
-        run: echo ${{ env.FIELD_ID }}
+        run: echo ${{ env.STATUS_FIELD_ID }}
+
+      - name: 'Dump Field value'
+        run: echo ${{ env.STATUS_FIELD_VALUE }}
 
 
