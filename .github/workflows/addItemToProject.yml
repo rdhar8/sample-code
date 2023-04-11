@@ -73,6 +73,8 @@ jobs:
 
             echo 'Execution success 2' 
             echo ${{ env.ITEM_ID }}
-
+      
+      - name: 'Dump Item Id'
+        run: echo ${{ env.ITEM_ID }}
 
 
