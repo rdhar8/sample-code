@@ -42,7 +42,7 @@ jobs:
         reviewers: ${{ github.actor }}
         labels: autofix
         delete-branch: true
-        title: "Autofix for branch ${{ github.head_ref }}"
+        title: "Auto Fix: \"${{ github.event.pull_request.title }} (#${{github.event.pull_request.number}})\" "
         body: |
             Automated PR to improve codestyle
             - Base PR ${{github.event.pull_request.html_url}}
