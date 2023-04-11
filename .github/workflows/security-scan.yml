@@ -1,13 +1,18 @@
-version: 2.1
+name: njsscan
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
 jobs:
   njsscan:
-    docker:
-      - image: cimg/python:3.9.6
+    runs-on: ubuntu-latest
+    name: njsscan check
     steps:
-      - checkout
-      - run:
-          name: Install njsscan
-          command: pip install --upgrade njsscan
-      - run:
-           name: njsscan check
-           command: njsscan .
+    - name: Checkout the code
+      uses: actions/checkout@v2
+    - name: nodejsscan scan
+      id: njsscan
+      uses: ajinabraham/njsscan-action@master
+      with:
+        args: '.'
