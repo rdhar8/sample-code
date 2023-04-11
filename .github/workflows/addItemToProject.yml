@@ -22,6 +22,6 @@ jobs:
       run: |
         echo ${{ env.ESLINT }}
         echo ${GITHUB_REPOSITORY#*/}
-        curl -X GET https://jira.nutanix.com/rest/api/latest/issue/SAAS-20750 -H "Authorization: Bearer MDMyMTg1MjI0Mjk1OmfTUtfG+aYWL8T8VLkspbzm/puu" | jq      
+        curl -X GET https://jira.nutanix.com/rest/api/latest/issue/SAAS-20750 -H "Authorization: Bearer " | jq      
     - name: Print Jira information
       run: echo "The output was $JIRA_STTAUS and $JIRA_SPRINT"
