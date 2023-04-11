@@ -10,11 +10,6 @@ jobs:
     - uses: actions/setup-node@v1
       with:
         node-version: '16'
-    - name: Get Configs    
-      run: |
-        config_response=$(curl -X GET https://api.npoint.io/2275cfec5ddfc130b1a1)
-        repo=$(cat $config_response | jq '.Ark')
-        echo $repo
     - name: Install dependencies
       run: npm install
     - name: Get Config
