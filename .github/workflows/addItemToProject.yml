@@ -1,27 +1,39 @@
-name: Add PR to Project Item
+name: Add PR to project
 on:
   pull_request:
-    branches: [ main ]
+    types:
+      - [assigned, unassigned]
 jobs:
-  addItem:
+  track_pr:
     runs-on: ubuntu-latest
-    name: A job to open Project Item when PR is raised
     steps:
-    - name: Dump github content
-      run: 'echo ''${{ toJSON(github.event) }}'' | jq'
-      shell: bash
-    - name: Get Jira Number
-      run: >-
-        echo 'Every repo can have its own logic for getting jira Number from
-        repo'
-    - name: Print Secret
-      env:
-        JIRA_TOKEN: '${{ secrets.JIRA_TOKEN }}'
-      run: echo ${{ env.JIRA_TOKEN }}
-    - name: Pull Jira information
-      run: |
-        echo ${{ env.ESLINT }}
-        echo ${GITHUB_REPOSITORY#*/}
-        curl -X GET "https://jira.nutanix.com/rest/api/latest/issue/SAAS-20750" -H "Authorization: Bearer " | jq      
-    - name: Print Jira information
-      run: echo "The output was $JIRA_STTAUS and $JIRA_SPRINT"
+      - name: Get project data
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ORGANIZATION: rdhar8
+          PROJECT_NUMBER: 1
+        run: |
+          gh api graphql -f query='
+            query($org: String!, $number: Int!) {
+              organization(login: $org){
+                projectV2(number: $number) {
+                  id
+                  fields(first:20) {
+                    nodes {
+                      ... on ProjectV2Field {
+                        id
+                        name
+                      }
+                      ... on ProjectV2SingleSelectField {
+                        id
+                        name
+                        options {
+                          id
+                          name
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }' -f org=$ORGANIZATION -F number=$PROJECT_NUMBER | jq
