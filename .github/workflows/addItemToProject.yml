@@ -6,6 +6,10 @@ jobs:
   track_pr:
     runs-on: ubuntu-latest
     steps:
+     - name: 'Dump github content'
+        run: echo '${{ toJSON(github.event) }}' | jq
+        shell: bash
+
       - name: Get project data
         env:
           GITHUB_TOKEN: ${{ secrets.PR_TOKEN }}
@@ -36,5 +40,31 @@ jobs:
                 }
               }
             }' -f user=$USER -F number=$PROJECT_NUMBER | jq
+            echo 'PROJECT_ID='$(jq '.data.user.projectV2.id' project_data.json) >> $GITHUB_ENV
 
             echo 'Execution success'
+
+      - name: Get Items data
+        env:
+          GITHUB_TOKEN: ${{ secrets.PR_TOKEN }}
+          USER: rdhar8
+          PROJECT_NUMBER: 1
+        run: |
+          gh api graphql -f query='
+            query($projectId: String!) {
+              node(id: $projectId){
+                ... on ProjectV2 {
+                  items(first: 20) {
+                    nodes{
+                      id
+                      content{
+                        ...on PullRequest {
+                          title
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }' -f projectId=$PROJECT_ID | jq
+
