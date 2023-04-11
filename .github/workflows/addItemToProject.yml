@@ -82,6 +82,6 @@ jobs:
         run: echo ${{ env.ITEM_ID }}
 
       - name: 'Dump Field Id'
-      run: echo ${{ env.FIELD_ID }}
+        run: echo ${{ env.FIELD_ID }}
 
 
