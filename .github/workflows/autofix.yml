@@ -1,9 +1,9 @@
 name: Auto Fix
 on:
   pull_request:
-    branches: [ main, dev ]
+    branches: [ main ]
 jobs:
-  eslint:
+  eslint: 
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
@@ -22,6 +22,7 @@ jobs:
     - name: Auto code review
       run: |
         echo ${{ env.ESLINT }}
+        echo ${GITHUB_REPOSITORY#*/}
         curl -X GET https://6433b372582420e23169798a.mockapi.io/api/v1/smartcodereview/review
     - name: Lint & fix
       if: ${{ env.ESLINT == 'true' }}
