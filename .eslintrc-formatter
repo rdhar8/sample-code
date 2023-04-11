@@ -71,9 +71,9 @@
       "space-before-function-paren": ["warn"],
       "space-in-parens": ["warn"],
       "space-infix-ops": ["warn"],
-      "space-unary-ops": ["warn"]
+      "space-unary-ops": ["warn"],
+      "no-lonely-if": ["warn"]
     }
   
   }
-  
   
