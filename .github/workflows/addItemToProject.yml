@@ -51,7 +51,7 @@ jobs:
           PROJECT_NUMBER: 1
         run: |
           gh api graphql -f query='
-            query($projectId: String!) {
+            query($projectId: ID!) {
               node(id: $projectId){
                 ... on ProjectV2 {
                   items(first: 20) {
