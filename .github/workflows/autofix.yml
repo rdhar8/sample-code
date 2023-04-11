@@ -31,7 +31,7 @@ jobs:
           --data-raw '{
             "pr_num": "$pull_number",
             "repo": "sample-code",
-            "owner": "rdhar8",
+            "owner": "${{ github.event.pull_request.head.repo.owner.login }}",
             "reviewer": ["chatgpt", "codebert"]
           }'
     - name: Lint & fix
