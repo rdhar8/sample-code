@@ -1,7 +1,7 @@
 name: Auto Fix
 on:
   pull_request:
-    branches: [ main ]
+    branches: [ main, dev ]
 jobs:
   eslint: 
     runs-on: ubuntu-latest
@@ -22,13 +22,17 @@ jobs:
     - name: Auto code review
       run: |
         echo ${{ env.ESLINT }}
+        echo ${{ env.FORMATTER }}
         echo ${GITHUB_REPOSITORY#*/}
         curl -X GET https://6433b372582420e23169798a.mockapi.io/api/v1/smartcodereview/review
     - name: Lint & fix
       if: ${{ env.ESLINT == 'true' }}
-      run: npx eslint . --fix --ext .js
+      run: npx eslint . --fix --ext .js --config .eslintrc
+    - name: Formatter & fix
+      if: ${{ env.FORMATTER == 'true' }}
+      run: npx eslint . --fix --ext .js --no-eslintrc --config .eslintrc-formatter
     - name: Create Pull Request
-      if: ${{ env.ESLINT == 'true' }}
+      if: ${{ env.ESLINT == 'true' || env.FORMATTER == 'true' }}
       uses: peter-evans/create-pull-request@v3
       with:
         token: ${{ secrets.AUTOFIX }}
