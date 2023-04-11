@@ -96,7 +96,7 @@ jobs:
 
       - name: 'Dump reviewers length'
         env:
-          NBR_REVIEWERS: echo '${{ toJSON(github.event) }}' | jq '.pull_request.requested_reviewers | length'
+          NBR_REVIEWERS: ${{ toJSON(github.event) }} | jq '.pull_request.requested_reviewers | length'
         run: echo ${{ env.NBR_REVIEWERS }}
 
       - name: 'Set Fields For Code Review'
