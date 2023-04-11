@@ -16,6 +16,5 @@ jobs:
         with:
           audit_level: moderate
           github_token: ${{ secrets.AUTOFIX }}
-          issue_assignees: oke-py
           issue_labels: vulnerability,test
           dedupe_issues: true
