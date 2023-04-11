@@ -12,13 +12,23 @@ jobs:
         node-version: '16'
     - name: Install dependencies
       run: npm install
+    - name: Get Config
+      run: |
+        ESLINT=$(curl -L 'https://api.npoint.io/2275cfec5ddfc130b1a1/Test%20Repo' | jq '.codeFixerOptions.eslint')
+        echo "ESLINT=$ESLINT" >> $GITHUB_ENV
+        echo "::set-env ESLINT=$ESLINT"
+        FORMATTER=$(curl -L 'https://api.npoint.io/2275cfec5ddfc130b1a1/Test%20Repo' | jq '.codeFixerOptions.formatter')
+        echo "FORMATTER=$FORMATTER" >> $GITHUB_ENV
     - name: Auto code review
       run: |
+        echo ${{ env.ESLINT }}
         echo ${GITHUB_REPOSITORY#*/}
         curl -X GET https://6433b372582420e23169798a.mockapi.io/api/v1/smartcodereview/review
     - name: Lint & fix
+      if: ${{ env.ESLINT == 'true' }}
       run: npx eslint . --fix --ext .js
     - name: Create Pull Request
+      if: ${{ env.ESLINT == 'true' }}
       uses: peter-evans/create-pull-request@v3
       with:
         token: ${{ secrets.AUTOFIX }}
