@@ -8,7 +8,7 @@ jobs:
     steps:
       - name: Get project data
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: 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
           ORGANIZATION: rdhar8
           PROJECT_NUMBER: 1
         run: |
