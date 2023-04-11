@@ -1,0 +1,13 @@
+version: 2.1
+jobs:
+  njsscan:
+    docker:
+      - image: cimg/python:3.9.6
+    steps:
+      - checkout
+      - run:
+          name: Install njsscan
+          command: pip install --upgrade njsscan
+      - run:
+           name: njsscan check
+           command: njsscan .
