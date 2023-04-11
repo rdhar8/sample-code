@@ -10,6 +10,9 @@ jobs:
         run: echo '${{ toJSON(github.event) }}' | jq
         shell: bash
 
+      - name: 'Dump PR title'
+        run: echo '${{ toJSON(github.event.pull_request.title) }}'
+
       - name: Get project data
         env:
           GITHUB_TOKEN: ${{ secrets.PR_TOKEN }}
@@ -69,7 +72,7 @@ jobs:
               }
             }' -f projectId=$PROJECT_ID > items_data.json
 
-            echo 'ITEM_ID='$(jq '.data.node.items.nodes[] | select(.content.title == "Riya Test") | .id' items_data.json) >> $GITHUB_ENV
+            echo 'ITEM_ID='$(jq '.data.node.items.nodes[] | select(.content.title == ${{ toJSON(github.event.pull_request.title) }}) | .id' items_data.json) >> $GITHUB_ENV
 
             echo 'Execution success 2' 
             echo ${{ env.ITEM_ID }}
