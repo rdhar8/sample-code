@@ -90,4 +90,29 @@ jobs:
       - name: 'Dump Field value'
         run: echo ${{ env.STATUS_FIELD_VALUE }}
 
+      - name: 'Set Fields'
+        env:
+          GITHUB_TOKEN: ${{ secrets.PR_TOKEN }}
+        run: |
+          gh api graphql -f query='
+            mutation (
+              $project: ID!
+              $item: ID!
+              $status_field: ID!
+              $status_value: String!
+            ) {
+              set_status: updateProjectV2ItemFieldValue(input: {
+                projectId: $project
+                itemId: $item
+                fieldId: $status_field
+                value: {
+                  singleSelectOptionId: $status_value
+                  }
+              }) {
+                projectV2Item {
+                  id
+                  }
+              }
+            }' -f project=$PROJECT_ID -f item=$ITEM_ID -f status_field=$STATUS_FIELD_ID -f status_value=$STATUS_FIELD_VALUE -f
+
 
