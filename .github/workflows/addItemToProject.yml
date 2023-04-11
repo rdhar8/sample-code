@@ -47,7 +47,7 @@ jobs:
 
             echo 'STATUS_FIELD_ID='$(jq '.data.user.projectV2.fields.nodes[] | select(.name == "Status").id' project_data.json) >> $GITHUB_ENV
 
-            echo 'STATUS_FIELD_VALUE='$(jq '.data.user.projectV2.fields.nodes[] | select(.name == "Status").options[] | select(.name == "Comments Added").id' project_data.json) >> $GITHUB_ENV
+            echo 'STATUS_FIELD_VALUE='$(jq '.data.user.projectV2.fields.nodes[] | select(.name == "Status").options[] | select(.name == "Code Review").id' project_data.json) >> $GITHUB_ENV
 
             echo 'Execution success' 
             echo ${{ env.PROJECT_ID }}
