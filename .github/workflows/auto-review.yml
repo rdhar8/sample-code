@@ -54,5 +54,5 @@ jobs:
             "pr_num": "${{ github.event.pull_request.number }}",
             "repo": "sample-code",
             "owner": "${{ github.event.pull_request.head.repo.owner.login }}",
-            "reviewer": '"$models"'
+            "review_model": '"$models"'
           }'
