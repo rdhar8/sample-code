@@ -33,7 +33,7 @@ jobs:
           open_items=$(echo "$json" | jq '.[] | select(.state == "open") | {url,id,node_id,number,title}')
           results=(1)
           while read -r item; do
-            url=$(echo '$item' | jq '.')
+            url=$(echo "$item" | jq)
             echo $url
           done <<< "$open_items"
           echo "${results[@]}"
