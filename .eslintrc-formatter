@@ -27,7 +27,11 @@
     },
   
     "parserOptions": {
-      "ecmaVersion": 2018
+      "ecmaVersion": "latest",
+      "sourceType": "module",
+      "ecmaFeatures": {
+          "jsx": true
+      }
     },
   
     "globals": {
@@ -65,7 +69,7 @@
       "no-mixed-spaces-and-tabs": ["warn"],
       "no-whitespace-before-property": ["warn"],
       "object-curly-newline": ["warn"],
-      "object-curly-spacing": ["warn"],
+      "object-curly-spacing": ["off"],
       "object-property-newline": ["off"],
       "space-before-blocks": ["warn"],
       "space-before-function-paren": ["warn"],
