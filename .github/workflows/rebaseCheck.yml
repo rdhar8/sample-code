@@ -9,12 +9,11 @@ jobs:
       - name: 'Dump github content'
         run: echo '${{ toJSON(github.event) }}' | jq
         shell: bash
-        
-      - name: 'Pull all PRs that are in open state against main branch'
+
+      - name: 'Pull all PRs that are in open state'
         env:
           USER: rdhar8
           REPO: sample-code
-          PROJECT_NUMBER: 1
           GH_TOKEN: ${{ secrets.PR_TOKEN }}
         run: |
           gh api -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" /repos/${{ env.USER }}/${{ env.REPO }}/pulls > prList.json
@@ -23,3 +22,12 @@ jobs:
 
       - name: 'Dump Filtered List'
         run: echo ${{ env.PR_LIST }}
+
+      - name: 'Make GET request to every PR in open State and check for mergeable attribute'
+        env:
+          USER: rdhar8
+          REPO: sample-code
+          GH_TOKEN: ${{ secrets.PR_TOKEN }}
+        run: |
+          open_items = ${{ toJSON(env.PR_LIST) }}
+          echo $open_items
