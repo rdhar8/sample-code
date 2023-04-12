@@ -1,4 +1,4 @@
-name: Smart Code Review
+name: SCoRe
 on:
   push:
     branches: [Nitin-test]
@@ -7,6 +7,7 @@ on:
 jobs:
   smart-code-review: 
     runs-on: ubuntu-latest
+    name: Auto Review
     steps:
     - uses: actions/checkout@v2
     - uses: actions/setup-node@v1
