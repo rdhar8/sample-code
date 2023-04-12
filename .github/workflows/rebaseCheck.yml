@@ -30,7 +30,7 @@ jobs:
           GH_TOKEN: ${{ secrets.PR_TOKEN }}
         run: |
           json=$(cat prList.json)
-          open_items=$(echo "$json" | jq '.[] | select(.state == "open") | {url,id,node_id,number,title} | @csv')
+          open_items=$(echo "$json" | jq '.[] | select(.state == "open") | {url,id,node_id,number,title} | [url,id,node_id,number,title] | @csv')
           echo "${open_items[@]}"
           echo "complete"
           while IFS=',' read -ra item; do
