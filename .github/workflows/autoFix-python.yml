@@ -1,7 +1,7 @@
 name: Auto Fix
 on:
   push:
-    branches: [testpy]
+    branches: [ testpy-old ]
   pull_request:
     branches: [ testpy ]
 jobs:
