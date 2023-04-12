@@ -23,15 +23,12 @@ jobs:
       - name: 'Dump Filtered List'
         run: cat filteredList.json
 
-      # - name: 'Make GET request to every PR in open State and check for mergeable attribute'
-      #   env:
-      #     USER: rdhar8
-      #     REPO: sample-code
-      #     GH_TOKEN: ${{ secrets.PR_TOKEN }}
-      #   run: |
-      #     while read -r item; do
-      #       key=$(echo "$item" | jq -r '.key')
-      #       url="https://example.com/api?key=$key"
-      #       result=$(curl -s "$url")
-      #       results+=("$result")
-      #     done <<< ${{ toJSON(env.PR_LIST) }}
+      - name: 'Make GET request to every PR in open State and check for mergeable attribute'
+        env:
+          USER: rdhar8
+          REPO: sample-code
+          GH_TOKEN: ${{ secrets.PR_TOKEN }}
+        run: |
+          json=$(cat prList.json)
+          open_items=$(echo "$json" | jq '.[] | select(.state == "open") | {url,id,node_id,number,title}')
+          echo $open_items
