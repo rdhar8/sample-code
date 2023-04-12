@@ -1,26 +1,29 @@
-name: Update Jira Status on Pull Request
+name: JIRA Story Details from Git Pull Request
 
 on:
   pull_request:
-    types: [opened, reopened]
-
-env:
-  JIRA_API_TOKEN: ATATT3xFfGF0T8TEJBxblfpPlPgwOkdG66PG42HPBo9ZePDHIFqvUpupG5DLoDZi3b25rg9p8eDZh61lQS7FJ8muKiMhMXIrUIE1W5QIW3UnN-KAmRxV2xlBWocyekPRh6ObpRGTYKIa96PWlYBcCJv-5E4_t4OJh6Zp3pk12rJUpq19wg4pzKA=AF8FACEB
-  JIRA_USERNAME: pratik jagtap
-  JIRA_URL: 'https://hackthon.atlassian.net/rest/api/latest/issue'
+    types: [opened, reopened, synchronize]
 
 jobs:
-  update_jira_status:
+  jira_story_details:
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout
-      uses: actions/checkout@v2
-    - name: Update Jira Status
-      uses: atlassian/gajira-transition@v3
-      with:
-        api_token: ATATT3xFfGF0T8TEJBxblfpPlPgwOkdG66PG42HPBo9ZePDHIFqvUpupG5DLoDZi3b25rg9p8eDZh61lQS7FJ8muKiMhMXIrUIE1W5QIW3UnN-KAmRxV2xlBWocyekPRh6ObpRGTYKIa96PWlYBcCJv-5E4_t4OJh6Zp3pk12rJUpq19wg4pzKA=AF8FACEB
-        jira_url: 'https://hackthon.atlassian.net/rest/api/latest/issue'
-        username: pratik jagtap
-        issue_key: ${{ github.event.pull_request.head.ref }}
-        transition_name: 'In Progress'
-
+      - name: Checkout code
+        uses: actions/checkout@v2
+      
+      - name: Install JIRA CLI
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y curl
+          curl -L "https://github.com/clearvision/jira-cli/releases/download/3.9.0/jira-linux-amd64" -o /usr/local/bin/jira
+          chmod +x /usr/local/bin/jira
+      
+      - name: Fetch JIRA Story Details
+        run: |
+          export JIRA_SITE='https://hackthon.atlassian.net'
+          export JIRA_USERNAME=pratikjagtap010@gmail.com
+          export JIRA_PASSWORD=ATATT3xFfGF0T8TEJBxblfpPlPgwOkdG66PG42HPBo9ZePDHIFqvUpupG5DLoDZi3b25rg9p8eDZh61lQS7FJ8muKiMhMXIrUIE1W5QIW3UnN-KAmRxV2xlBWocyekPRh6ObpRGTYKIa96PWlYBcCJv-5E4_t4OJh6Zp3pk12rJUpq19wg4pzKA=AF8FACEB
+          export PR_ID=$(echo $GITHUB_REF | awk 'BEGIN { FS = "/" } ; { print $3 }')
+          export JIRA_ISSUE_KEY=$(jira pr list --project <your_jira_project_key> --pr $PR_ID | awk '{ print $1 }')
+          export JIRA_ISSUE_DETAILS=$(jira issue get --issue $JIRA_ISSUE_KEY)
+          echo $JIRA_ISSUE_DETAILS
