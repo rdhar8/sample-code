@@ -1,63 +1,63 @@
-name: Check if other PRs can be merged
-on:
-  pull_request:
-    types: [review_requested, review_request_removed]
-jobs:
-  track_pr:
-    runs-on: ubuntu-latest
-    steps:
-      - name: 'Dump github content'
-        run: echo '${{ toJSON(github.event) }}' | jq
-        shell: bash
+# name: Check if other PRs can be merged
+# on:
+#   pull_request:
+#     types: [review_requested, review_request_removed]
+# jobs:
+#   track_pr:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: 'Dump github content'
+#         run: echo '${{ toJSON(github.event) }}' | jq
+#         shell: bash
 
-      - name: 'Pull all PRs that are in open state'
-        env:
-          USER: rdhar8
-          REPO: sample-code
-          GH_TOKEN: ${{ secrets.PR_TOKEN }}
-        run: |
-          gh api -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" /repos/${{ env.USER }}/${{ env.REPO }}/pulls > prList.json
+#       - name: 'Pull all PRs that are in open state'
+#         env:
+#           USER: rdhar8
+#           REPO: sample-code
+#           GH_TOKEN: ${{ secrets.PR_TOKEN }}
+#         run: |
+#           gh api -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" /repos/${{ env.USER }}/${{ env.REPO }}/pulls > prList.json
 
-          jq '.[] | select(.state == "open") | {url,id,node_id,number,title}' prList.json > filteredList.json
+#           jq '.[] | select(.state == "open") | {url,id,node_id,number,title}' prList.json > filteredList.json
 
-      - name: 'Dump Filtered List'
-        run: cat filteredList.json
+#       - name: 'Dump Filtered List'
+#         run: cat filteredList.json
 
-      - name: 'Make GET request to every PR in open State and check for mergeable attribute'
-        env:
-          USER: rdhar8
-          REPO: sample-code
-          GH_TOKEN: ${{ secrets.PR_TOKEN }}
-        run: |
-          json=$(cat prList.json)
-          open_items=$(echo "$json" | jq -r '.[] | select(.state == "open") | {url,id,node_id,number,title} | [.url,.id,.node_id,.number,.title] | @csv')
-          echo "${open_items[@]}"
-          echo "complete"
-          results=()
-          while IFS=',' read -ra item; do
-            url=${item[0]}
-            id=${item[1]}
-            node_id=${item[2]}
-            number=${item[3]}
-            title=${item[4]}
+#       - name: 'Make GET request to every PR in open State and check for mergeable attribute'
+#         env:
+#           USER: rdhar8
+#           REPO: sample-code
+#           GH_TOKEN: ${{ secrets.PR_TOKEN }}
+#         run: |
+#           json=$(cat prList.json)
+#           open_items=$(echo "$json" | jq -r '.[] | select(.state == "open") | {url,id,node_id,number,title} | [.url,.id,.node_id,.number,.title] | @csv')
+#           echo "${open_items[@]}"
+#           echo "complete"
+#           results=()
+#           while IFS=',' read -ra item; do
+#             url=${item[0]}
+#             id=${item[1]}
+#             node_id=${item[2]}
+#             number=${item[3]}
+#             title=${item[4]}
 
-            echo "Processing url $url"
+#             echo "Processing url $url"
 
-            result=$( gh api -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" /repos/${{ env.USER }}/${{ env.REPO }}/pulls/$number )
+#             result=$( gh api -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" /repos/${{ env.USER }}/${{ env.REPO }}/pulls/$number )
 
-            mergable=$(echo "$result" | jq -r '.mergeable')
-            if [ "$mergable" = "true" ]; then
-              echo "Item $id is mergable"
-            else
-              echo "Item $id is not mergable"
-              results+=( "$(echo "{\"url\": $url, \"id\": $id, \"node_id\": $node_id, \"number\": $number, \"title\": $title }")")
-            fi
-          done <<< "$open_items"
-          echo "completed processing"
-          echo $results
+#             mergable=$(echo "$result" | jq -r '.mergeable')
+#             if [ "$mergable" = "true" ]; then
+#               echo "Item $id is mergable"
+#             else
+#               echo "Item $id is not mergable"
+#               results+=( "$(echo "{\"url\": $url, \"id\": $id, \"node_id\": $node_id, \"number\": $number, \"title\": $title }")")
+#             fi
+#           done <<< "$open_items"
+#           echo "completed processing"
+#           echo $results
 
-          # Use jq to format the results array as a JSON array
-          json_results=$(echo "${results[*]}" | jq -s '.')
+#           # Use jq to format the results array as a JSON array
+#           json_results=$(echo "${results[*]}" | jq -s '.')
 
-          echo "json parsed results"
-          echo $json_results
+#           echo "json parsed results"
+#           echo $json_results
