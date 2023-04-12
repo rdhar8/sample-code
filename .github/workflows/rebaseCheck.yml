@@ -31,10 +31,10 @@ jobs:
         run: |
           json=$(cat prList.json)
           open_items=$(echo "$json" | jq '.[] | select(.state == "open") | {url,id,node_id,number,title}')
-          echo $open_items
           results=()
           while read -r item; do
             url=$(echo "$item" | jq -r '.url')
+            echo $url
             results+=("$url")
           done <<< "$open_items"
           echo "${results[@]}"
