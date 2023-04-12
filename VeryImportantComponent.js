@@ -1,14 +1,23 @@
-import { Alert } from '@nutanix-ui/prism-reactjs';
-import { useGetTranslation } from '../../hooks/useGetTranslation';
+import { Button } from 'antd';
+import { useCallback } from 'react';
 
-function VeryImportantComponent () {
-  const { i18n__T } = useGetTranslation();
+function VeryImportantComponent (props) {
+  const text = 'Select a number from 1 to 10'
+
+  if (!props.visible) return;
+
+  const clickButton = useCallback(() => {
+    // performs a very important function
+  }, []);
+
   return (
-    <Alert
-      type={'info'}
-      data-test-id={'type-info'}
-      message={i18n__T('Alert_Message')}
-    />
+    <div style={{ display: 'flex', justifyContent: 'center' }}>
+      <Button
+        onClick={() => clickButton()}
+      >
+        {text}
+      </Button>
+    </div>
   );
 }
 

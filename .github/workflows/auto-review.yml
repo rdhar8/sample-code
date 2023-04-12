@@ -35,7 +35,7 @@ jobs:
         Y=()
         if [ ${{ env.CHATGPT }} == 'true' ]
         then
-           Y+=("eslint")
+           Y+=("chatgpt")
         fi
         if [ ${{ env.MICROSOFT }} == 'true' ]
         then
