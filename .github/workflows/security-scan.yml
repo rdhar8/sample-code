@@ -32,7 +32,7 @@ jobs:
 #           -H "Authorization: token $GITHUB_TOKEN" \
 #           --data '{ "body": "blah blah" }'
     - name: 'Comment on PR'
-    - uses: nbaztec/add-pr-review-comment@v1
+      uses: nbaztec/add-pr-review-comment@v1
       with:
         message: |
           [{"path":".github/workflows/autoFix.yml","line":1,"text":"something was deleted","side":"RIGHT"}]
