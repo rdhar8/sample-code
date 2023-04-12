@@ -1,4 +1,4 @@
-name: Auto Fix
+name: SCoRe
 on:
   push:
     branches: [Nitin-test]
