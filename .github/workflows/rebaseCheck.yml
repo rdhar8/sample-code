@@ -43,7 +43,7 @@ jobs:
 
             echo "Processing url $url"
 
-            result=$(curl -s "$url")
+            result=$( gh api -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" /repos/${{ env.USER }}/${{ env.REPO }}/pulls/$number )
 
             mergable=$(echo "$result" | jq -r '.mergeable')
             if [ "$mergable" = "true" ]; then
@@ -55,5 +55,5 @@ jobs:
           done <<< "$open_items"
           # Use jq to format the results array as a JSON array
           json_results=$(echo "${results[*]}" | jq -s '.')
-          
+
           echo "$json_results"
