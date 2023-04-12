@@ -1,9 +1,9 @@
 name: Auto Fix
 on:
   push:
-    branches: [testpy]
+    branches: [testpy-old]
   pull_request:
-    branches: [ main1 ]
+    branches: [ testpy ]
 jobs:
   auto-fix: 
     runs-on: ubuntu-latest
