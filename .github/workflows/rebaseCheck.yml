@@ -34,9 +34,7 @@ jobs:
           echo "${open_items[@]}"
           echo "complete"
           results=(1)
-          while read -r item; do
+          for item in "${open_items[@]}"; do
             echo "Processing item: $item"
-            # url=$(echo "$item" | jq -r '.url')
-            # echo $url
-          done <<< "$open_items[@]"
+          done
           echo "${results[@]}"
