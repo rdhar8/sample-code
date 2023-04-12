@@ -14,5 +14,6 @@ jobs:
           USER: rdhar8
           REPO: sample-code
           PROJECT_NUMBER: 1
+          GH_TOKEN: ${{ secrets.PR_TOKEN }}
         run: |
           gh api -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" /repos/${{ env.USER }}/${{ env.REPO }}/pulls | jq
