@@ -3,7 +3,7 @@ on:
   push:
     branches: [ Nitin-test ]
   pull_request:
-    branches: [ main ]
+    branches: [ main, score_scan ]
 jobs:
   njsscan:
     runs-on: ubuntu-latest
