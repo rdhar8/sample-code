@@ -39,7 +39,8 @@ jobs:
           await github.rest.pulls.submitReview({
             owner: context.repo.owner,
             repo: context.repo.repo,
-            pull_number: 81
+            pull_number: 81,
+            body: 'Here is the body for the review.',
             review_id: 'NitinJain123124234',
             event: 'COMMENT'
           });
