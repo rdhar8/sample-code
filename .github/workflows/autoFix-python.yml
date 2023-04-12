@@ -20,4 +20,10 @@ jobs:
       with:
         github_token: ${{ secrets.AUTOFIX }}
         auto_fix: true
+        pylint: true
+        pylint_auto_fix: true
+        black: true
+        black_auto_fix: true
+        flake8: true
+        flake8_auto_fix: false
         commit: false
