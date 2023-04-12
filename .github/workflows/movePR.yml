@@ -71,6 +71,7 @@ jobs:
                       id
                       content{
                         ...on PullRequest {
+                          id
                           title
                         }
                       }
