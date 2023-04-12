@@ -30,6 +30,6 @@ jobs:
 
     steps:
       - name: 'Dump github content'
-        run: echo '${{ toJSON(github.event) }}' | jq
+        run: echo 'branch name ${{ toJSON(github.event.pull_request.head.ref) }}' | jq
         shell: bash
 
