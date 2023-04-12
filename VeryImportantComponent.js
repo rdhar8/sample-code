@@ -1,8 +1,10 @@
 import { Button } from 'antd';
 import { useCallback } from 'react';
 
-function VeryImportantComponent () {
-  const text = 'Select a number from 1 to 10';
+function VeryImportantComponent (props) {
+  const text = 'Select a number from 1 to 10'
+
+  if (!props.visible) return;
 
   const clickButton = useCallback(() => {
     // performs a very important function
