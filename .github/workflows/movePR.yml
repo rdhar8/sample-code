@@ -1,7 +1,7 @@
-name: Add PR to project
+name: Move PR based on review status
 on:
   pull_request:
-    types: [open, review_requested, review_request_removed]
+    types: [review_requested, review_request_removed]
 jobs:
   track_pr:
     runs-on: ubuntu-latest
