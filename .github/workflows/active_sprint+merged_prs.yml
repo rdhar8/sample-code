@@ -1,0 +1,27 @@
+name: Show Merged PRs for Active Sprint
+
+on:
+  push:
+    branches:
+      - main # Update the branch name to the one you use for your main branch
+
+jobs:
+  show_merged_prs:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+    
+    - name: Filter merged PRs
+      run: |
+        # Set the start and end dates for your sprint
+        start_date="2023-04-01"
+        end_date="2023-04-30"
+        
+        # Get the list of merged PRs
+        prs=$(git log --merges --after=$start_date --before=$end_date --pretty=format:'%s' | grep -oP '(?<=Merge pull request #)\d+')
+        
+        # Print the list of merged PRs
+        echo "Merged PRs for the active sprint:"
+        echo "$prs"
