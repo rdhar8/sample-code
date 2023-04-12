@@ -48,9 +48,14 @@ jobs:
             mergable=$(echo "$result" | jq -r '.mergeable')
             if [ "$mergable" = "true" ]; then
               echo "Item $id is mergable"
+            else
+              echo "Item $id is not mergable"
               results+=( "$(echo "{\"url\": \"$url\", \"id\": \"$id\", \"node_id\": \"$node_id\", \"number\": \"$number\", \"title\": \"$title\" }")")
             fi
           done <<< "$open_items"
+          echo "completed processing"
+          echo $results
+          
           # Use jq to format the results array as a JSON array
           json_results=$(echo "${results[*]}" | jq -s '.')
 
