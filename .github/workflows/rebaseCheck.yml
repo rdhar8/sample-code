@@ -30,7 +30,7 @@ jobs:
           GH_TOKEN: ${{ secrets.PR_TOKEN }}
         run: |
           json=$(cat prList.json)
-          open_items=$(echo "$json" | jq '.[] | select(.state == "open") | {url,id,node_id,number,title}')
+          open_items=$(echo "$json" | jq '.[] | select(.state == "open") | {url,id,node_id,number,title} | @json')
           echo "${open_items[@]}"
           echo "complete"
           results=(1)
