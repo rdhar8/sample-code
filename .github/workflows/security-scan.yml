@@ -1,4 +1,4 @@
-name: njsscan
+name: SCoRe
 on:
   push:
     branches: [ Nitin-test ]
@@ -7,7 +7,7 @@ on:
 jobs:
   njsscan:
     runs-on: ubuntu-latest
-    name: njsscan check
+    name: Security Scan
     steps:
     - name: Checkout the code
       uses: actions/checkout@v2
