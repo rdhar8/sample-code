@@ -1,3 +1,4 @@
+
 var mysql = require('mysql');
 
 connection.query("SELECT * FROM bank_accounts WHERE dob = ? AND bank_account = ?", [
