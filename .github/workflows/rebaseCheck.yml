@@ -32,3 +32,5 @@ jobs:
           json=$(cat prList.json)
           open_items=$(echo "$json" | jq '.[] | select(.state == "open") | {url,id,node_id,number,title}')
           echo $open_items
+          results=(1)
+          echo "${results[@]}"
