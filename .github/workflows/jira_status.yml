@@ -16,7 +16,7 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
     - name: Update Jira Status
-      uses: atlassian/gajira-transition@v1
+      uses: atlassian/gajira-transition@v3
       with:
         api_token: ATATT3xFfGF0T8TEJBxblfpPlPgwOkdG66PG42HPBo9ZePDHIFqvUpupG5DLoDZi3b25rg9p8eDZh61lQS7FJ8muKiMhMXIrUIE1W5QIW3UnN-KAmRxV2xlBWocyekPRh6ObpRGTYKIa96PWlYBcCJv-5E4_t4OJh6Zp3pk12rJUpq19wg4pzKA=AF8FACEB
         jira_url: https://hackthon.atlassian.net/rest/api/latest/issue
