@@ -32,16 +32,10 @@ jobs:
 #           -H "Authorization: token $GITHUB_TOKEN" \
 #           --data '{ "body": "blah blah" }'
     - name: 'Comment on PR'
-      uses: actions/github-script@v5
+    - uses: nbaztec/add-pr-review-comment@v1
       with:
-        github-token: ${{ secrets.AUTOFIX }}
-        script: |
-          await github.rest.pulls.submitReview({
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            pull_number: 81,
-            body: 'Here is the body for the review.',
-            review_id: 'NitinJain123124234',
-            event: 'COMMENT'
-          });
-          
+        message: |
+          [{"path":".github/workflows/autoFix.yml","line":1,"text":"something was deleted","side":"RIGHT"}]
+        repo-token: ${{ secrets.AUTOFIX }}
+        repo-token-user-login: 'github-actions[bot]' # The user.login for temporary GitHub tokens
+        allow-repeats: false # 
