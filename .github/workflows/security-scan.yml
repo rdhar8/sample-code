@@ -1,9 +1,9 @@
-name: njsscan sarif
+name: njsscan
 on:
   push:
-    branches: [ master, main ]
+    branches: [ Nitin-test ]
   pull_request:
-    branches: [ master, main ]
+    branches: [ main ]
 jobs:
   njsscan:
     runs-on: ubuntu-latest
