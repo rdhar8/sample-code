@@ -50,7 +50,7 @@ jobs:
               echo "Item $id is mergable"
             else
               echo "Item $id is not mergable"
-              results+=( "$(echo "{\"url\": \"$url\", \"id\": \"$id\", \"node_id\": \"$node_id\", \"number\": \"$number\", \"title\": \"$title\" }")")
+              results+=( "$(echo "{\"url\": $url, \"id\": $id, \"node_id\": $node_id, \"number\": $number, \"title\": $title }")")
             fi
           done <<< "$open_items"
           echo "completed processing"
