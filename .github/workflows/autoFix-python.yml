@@ -1,9 +1,9 @@
 name: Auto Fix
 on:
   push:
-    branches: [Nitin-test, testpy]
+    branches: [testpy]
   pull_request:
-    branches: [ main ]
+    branches: [ main1 ]
 jobs:
   auto-fix: 
     runs-on: ubuntu-latest
