@@ -10,9 +10,9 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Set up Python
-        uses: actions/setup-python@v1
-        with:
-          python-version: 3.8
+      uses: actions/setup-python@v1
+      with:
+        python-version: 3.8
     - name: Install Python dependencies
       run: pip install black flake8
     - name: Get Config
@@ -24,13 +24,13 @@ jobs:
         echo "FORMATTER=$FORMATTER" >> $GITHUB_ENV
         echo "::set-env FORMATTER=$FORMATTER"
     - name: Run linters
-        uses: wearerequired/lint-action@v2
-        with:
-          auto_fix: true
-          black: true
-          black_auto_fix: true
-          flake8: true
-          flake8_auto_fix: false
+      uses: wearerequired/lint-action@v2
+      with:
+        auto_fix: true
+        black: true
+        black_auto_fix: true
+        flake8: true
+        flake8_auto_fix: false
     - name: Create Pull Request
       uses: peter-evans/create-pull-request@v3
       with:
