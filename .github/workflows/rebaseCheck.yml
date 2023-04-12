@@ -31,9 +31,11 @@ jobs:
         run: |
           json=$(cat prList.json)
           open_items=$(echo "$json" | jq '.[] | select(.state == "open") | {url,id,node_id,number,title}')
+          echo "${open_items[@]}"
+          echo "complete"
           results=(1)
           while read -r item; do
-            echo "Processing item: $item"
+            echo "$item"
             # url=$(echo "$item" | jq -r '.url')
             # echo $url
           done <<< "$open_items"
