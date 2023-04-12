@@ -18,16 +18,20 @@ jobs:
         run: |
           gh api -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" /repos/${{ env.USER }}/${{ env.REPO }}/pulls > prList.json
 
-          echo 'PR_LIST='$(jq '.[] | select(.state == "open") | {url, id, node_id, number, title}' prList.json) >> $GITHUB_ENV
+          jq '.[] | select(.state == "open") | {url, id, node_id, number, title' prList.json > filteredList.json
 
       - name: 'Dump Filtered List'
-        run: echo ${{ env.PR_LIST }}
+        run: cat filteredList.json
 
-      - name: 'Make GET request to every PR in open State and check for mergeable attribute'
-        env:
-          USER: rdhar8
-          REPO: sample-code
-          GH_TOKEN: ${{ secrets.PR_TOKEN }}
-        run: |
-          open_items = ${{ toJSON(env.PR_LIST) }}
-          echo $open_items
+      # - name: 'Make GET request to every PR in open State and check for mergeable attribute'
+      #   env:
+      #     USER: rdhar8
+      #     REPO: sample-code
+      #     GH_TOKEN: ${{ secrets.PR_TOKEN }}
+      #   run: |
+      #     while read -r item; do
+      #       key=$(echo "$item" | jq -r '.key')
+      #       url="https://example.com/api?key=$key"
+      #       result=$(curl -s "$url")
+      #       results+=("$result")
+      #     done <<< ${{ toJSON(env.PR_LIST) }}
