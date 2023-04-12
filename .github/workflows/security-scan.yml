@@ -7,35 +7,12 @@ on:
 jobs:
   njsscan:
     runs-on: ubuntu-latest
-    name: njsscan code scanning
+    name: njsscan check
     steps:
     - name: Checkout the code
       uses: actions/checkout@v2
-#     - name: nodejsscan scan
-#       id: njsscan
-#       uses: ajinabraham/njsscan-action@master
-#       with:
-#         args: '. --sarif --output results.sarif || true'
-#     - name: Upload njsscan report
-#       uses: github/codeql-action/upload-sarif@v1
-#       with:
-#         sarif_file: results.sarif
-#     - name: Add comment to PR
-#       env:
-#         URL: ${{ github.event.issue.comments_url }}
-#         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#       run: |
-#         curl \
-#           -X POST \
-#           $URL \
-#           -H "Content-Type: application/json" \
-#           -H "Authorization: token $GITHUB_TOKEN" \
-#           --data '{ "body": "blah blah" }'
-    - name: 'Comment on PR'
-      uses: nbaztec/add-pr-review-comment@v1
+    - name: nodejsscan scan
+      id: njsscan
+      uses: ajinabraham/njsscan-action@master
       with:
-        message: |
-          [{"path":".github/workflows/autoFix.yml","line":1,"text":"something was deleted","side":"RIGHT"}]
-        repo-token: ${{ secrets.AUTOFIX }}
-        repo-token-user-login: 'github-actions[bot]' # The user.login for temporary GitHub tokens
-        allow-repeats: false # 
+        args: '.'
