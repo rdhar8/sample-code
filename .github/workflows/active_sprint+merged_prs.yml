@@ -3,7 +3,7 @@ name: Show Merged PRs for Active Sprint
 on:
   push:
     branches:
-      - main # Update the branch name to the one you use for your main branch
+      - main # Update the branch name to the one you use for your main branch 'test commit'
 
 jobs:
   show_merged_prs:
