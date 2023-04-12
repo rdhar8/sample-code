@@ -15,7 +15,4 @@ jobs:
           REPO: sample-code
           PROJECT_NUMBER: 1
         run: |
-          gh api
-            -H "Accept: application/vnd.github+json" 
-            -H "X-GitHub-Api-Version: 2022-11-28" 
-            /repos/${{ env.USER }}/${{ env.REPO }}/pulls | jq
+          gh api -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" /repos/${{ env.USER }}/${{ env.REPO }}/pulls | jq
