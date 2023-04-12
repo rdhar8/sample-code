@@ -28,3 +28,4 @@ jobs:
           export JIRA_ISSUE_DETAILS=$(jira issue get --issue $JIRA_ISSUE_KEY)
           echo $JIRA_ISSUE_DETAILS
 
+
