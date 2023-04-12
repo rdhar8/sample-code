@@ -49,8 +49,6 @@ jobs:
             if [ "$mergable" = "true" ]; then
               echo "Item $id is mergable"
               results+=( "$(echo "{\"url\": \"$url\", \"id\": \"$id\", \"node_id\": \"$node_id\", \"number\": \"$number\", \"title\": \"$title\" }")")
-            else
-              echo "Item $id is not mergable"
             fi
           done <<< "$open_items"
           # Use jq to format the results array as a JSON array
