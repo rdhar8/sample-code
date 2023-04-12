@@ -34,7 +34,5 @@ jobs:
           results=(1)
           while read -r item; do
             echo $item
-            url=$(echo "$item" | jq '.url')
-            echo $url
           done <<< "$open_items"
           echo "${results[@]}"
