@@ -151,7 +151,6 @@ jobs:
           jsonData=$(cat filtered.json)
           nodeIds=$(echo $jsonData | jq -c '.filtered[] | .node_id')
           result=()
-          jq '.data.node.items.nodes[]' items_data.json
 
           for nodeId in $nodeIds; do
 
@@ -165,16 +164,15 @@ jobs:
           done
 
           echo "all item ids: ${result[@]}"
+          echo "{\"itemIdList\":${json_results_short[@]}}" > itemIdList.json
 
-
-
-      # - name: 'Get Items Ids of Project corresponding to filtered PR'
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.PR_TOKEN }}
-      #   if: ${{ env.PR_LENGTH > 0 }}
-      #   run: |
-      #     jsonData=$(cat filtered.json)
-      #     urls=$(echo $jsonData | jq -c '.filtered[] | .url')
-      #     for url in $urls; do
-      #       echo "$url"
-      #     done
+      - name: 'Set above item Id to rebase required in Project'
+        env:
+          GITHUB_TOKEN: ${{ secrets.PR_TOKEN }}
+        if: ${{ env.PR_LENGTH > 0 }}
+        run: |
+          jsonData=$(cat itemIdList.json)
+          itemIds=$(echo $jsonData | jq -c '.itemIdList[]')
+          for itemId in $itemIds; do
+            echo "$itemId"
+          done
