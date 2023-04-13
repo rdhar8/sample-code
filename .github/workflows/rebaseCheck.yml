@@ -124,13 +124,52 @@ jobs:
       - name: 'Dump Short results'
         run: echo ${{ env.JSON_RESULTS_SHORT }} 
 
-      - name: 'Set Fields For Rebase required'
+      - name: 'Get Items Ids of Project corresponding to filtered PR'
         env:
           GITHUB_TOKEN: ${{ secrets.PR_TOKEN }}
         if: ${{ env.PR_LENGTH > 0 }}
         run: |
+          gh api graphql -f query='
+            query($projectId: ID!) {
+              node(id: $projectId){
+                ... on ProjectV2 {
+                  items(first: 50) {
+                    nodes{
+                      id
+                      content{
+                        ...on PullRequest {
+                          id
+                          title
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }' -f projectId=$PROJECT_ID > items_data.json
+
           jsonData=$(cat filtered.json)
-          urls=$(echo $jsonData | jq -c '.filtered[] | .url')
-          for url in $urls; do
-            echo "$url"
+          nodeIds=$(echo $jsonData | jq -c '.filtered[] | .node_id')
+          result=()
+
+          for nodeId in $nodeIds; do
+            echo "pulling data for nodeId: $nodeId"
+            itemId = $(jq '.data.node.items.nodes[] | select(.content.id == $nodeId) | .id' items_data.json)
+            echo "item id received: $itemId"
+            result+=("$itemId")
           done
+
+          echo "all item ids: ${result[@]}"
+
+
+
+      # - name: 'Get Items Ids of Project corresponding to filtered PR'
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.PR_TOKEN }}
+      #   if: ${{ env.PR_LENGTH > 0 }}
+      #   run: |
+      #     jsonData=$(cat filtered.json)
+      #     urls=$(echo $jsonData | jq -c '.filtered[] | .url')
+      #     for url in $urls; do
+      #       echo "$url"
+      #     done
