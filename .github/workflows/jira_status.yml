@@ -19,13 +19,5 @@ jobs:
           chmod +x /usr/local/bin/jira
       
       - name: Fetch JIRA Story Details
-        run: |
-          export JIRA_SITE=https://hackthon.atlassian.net/rest/api/latest/issue/${{ (github.event.pull_request.head.ref) }}
-          export JIRA_USERNAME='pratikjagtap010@gmail.com'
-          export JIRA_PASSWORD='ATATT3xFfGF0T8TEJBxblfpPlPgwOkdG66PG42HPBo9ZePDHIFqvUpupG5DLoDZi3b25rg9p8eDZh61lQS7FJ8muKiMhMXIrUIE1W5QIW3UnN-KAmRxV2xlBWocyekPRh6ObpRGTYKIa96PWlYBcCJv-5E4_t4OJh6Zp3pk12rJUpq19wg4pzKA=AF8FACEB'
-          export PR_ID=$(echo $GITHUB_REF | awk 'BEGIN { FS = "/" } ; { print $3 }')
-          export JIRA_ISSUE_KEY=$(jira pr list --project SMART_CODE --pr $PR_ID | awk '{ print $1 }')
-          export JIRA_ISSUE_DETAILS=$(jira issue get --issue $JIRA_ISSUE_KEY)
-          echo $JIRA_ISSUE_DETAILS
-
-
+        run: >-
+                curl --user GET https://hackthon.atlassian.net/rest/api/latest/issue/${{ (github.event.pull_request.head.ref) }}
