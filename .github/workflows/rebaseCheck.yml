@@ -156,6 +156,7 @@ jobs:
           result=()
 
           for Item in $nodeIds; do
+            echo $Item
             nodeId=$(echo $Item | jq '.["node_id:"]')
             number=$(echo $Item | jq '.["number:"]')
             echo "pulling data for nodeId: $nodeId and number: $number"
