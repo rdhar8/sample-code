@@ -73,6 +73,7 @@ jobs:
             echo "::set-output name=short_array::${json_results_short[@]}"
             echo "json short results"
             echo "$json_results_short"
+            echo "{\"filtered\":${json_results_short[@]}}" > filtered.json
             
             json_results_length=$(echo "$json_results" | jq 'length')
           fi
@@ -128,11 +129,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.PR_TOKEN }}
         if: ${{ env.PR_LENGTH > 0 }}
         run: |
-          # echo ${{ env.JSON_RESULTS_SHORT }}
-          # echo "first part"
-          shortList=(${{ env.JSON_RESULTS_SHORT }})
-          # echo $shortList
-          # echo "second part"
+          shortList=($(cat filtered.json | jq -r '.filtered[]'))
           for item in "${shortList[@]}"
           do
             echo "Processing item"
