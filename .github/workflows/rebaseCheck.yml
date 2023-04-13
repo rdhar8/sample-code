@@ -119,7 +119,7 @@ jobs:
 
             echo 'STATUS_FIELD_ID='$(jq '.data.user.projectV2.fields.nodes[] | select(.name == "Status").id' project_data.json) >> $GITHUB_ENV
 
-            echo 'STATUS_FIELD_VALUE_REBASE='$(jq '.data.user.projectV2.fields.nodes[] | select(.name == "Status").options[] | select(.name == "Rebase Required").id' project_data.json) >> $GITHUB_ENV
+            echo 'STATUS_FIELD_VALUE='$(jq '.data.user.projectV2.fields.nodes[] | select(.name == "Status").options[] | select(.name == "Rebase Required").id' project_data.json) >> $GITHUB_ENV
       
       - name: 'Dump Short results'
         run: echo ${{ env.JSON_RESULTS_SHORT }} 
@@ -161,23 +161,30 @@ jobs:
 
             itemId=$(jq --argjson nodeId "$nodeId" '.data.node.items.nodes[] | select(.content.id == $nodeId) | .id' items_data.json)
             echo $itemId
+
+            #Send request to update status to rebase required
+            gh api graphql -f query='
+            mutation (
+              $project: ID!
+              $item: ID!
+              $status_field: ID!
+              $status_value: String!
+            ) {
+              set_status: updateProjectV2ItemFieldValue(input: {
+                projectId: $project
+                itemId: $item
+                fieldId: $status_field
+                value: {
+                  singleSelectOptionId: $status_value
+                  }
+              }) {
+                projectV2Item {
+                  id
+                  }
+              }
+            }' -f project=$PROJECT_ID -f item=$itemId -f status_field=$STATUS_FIELD_ID -f status_value=${{ env.STATUS_FIELD_VALUE }}
+
             result+=("$itemId")
           done
 
           echo "all item ids: ${result[@]}"
-          # # Format the result array properly
-          # formatted_result=$(printf '%s\n' "${result[@]}")
-          echo "{\"itemIdList\":${result[@]}}" > itemIdList.json
-
-      - name: 'Set above item Ids to rebase required in Project'
-        env:
-          GITHUB_TOKEN: ${{ secrets.PR_TOKEN }}
-        if: ${{ env.PR_LENGTH > 0 }}
-        run: |
-          cat itemIdList.json
-          jsonData=$(cat itemIdList.json)
-          echo "json data $jsonData"
-          # itemIds=$(echo $jsonData | jq -c '.itemIdList[]')
-          # for itemId in $itemIds; do
-          #   echo "Processing item $itemId"
-          # done
