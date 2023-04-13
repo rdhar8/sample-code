@@ -1,9 +1,11 @@
 name: Check if other PRs can be merged
 on:
   pull_request:
-    types: [review_requested, review_request_removed]
+    types:
+      - closed
 jobs:
-  track_pr:
+  if_merged:
+    if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     steps:
       - name: 'Dump github content'
@@ -68,12 +70,12 @@ jobs:
             echo "json parsed results"
             echo "$json_results"
 
-            json_results_short=$(echo "$json_results" | jq '.[:2]')
-            echo 'JSON_RESULTS_SHORT='$(echo $json_results_short) >> $GITHUB_ENV
-            echo "::set-output name=short_array::${json_results_short[@]}"
-            echo "json short results"
-            echo "$json_results_short"
-            echo "{\"filtered\":${json_results_short[@]}}" > filtered.json
+            # json_results_short=$(echo "$json_results" | jq '.[:2]')
+            # echo 'JSON_RESULTS_SHORT='$(echo $json_results_short) >> $GITHUB_ENV
+            # echo "json short results"
+            # echo "$json_results_short"
+
+            echo "{\"filtered\":${json_results[@]}}" > filtered.json
             
             json_results_length=$(echo "$json_results" | jq 'length')
           fi
@@ -121,11 +123,10 @@ jobs:
 
             echo 'STATUS_FIELD_VALUE='$(jq '.data.user.projectV2.fields.nodes[] | select(.name == "Status").options[] | select(.name == "Rebase Required").id' project_data.json) >> $GITHUB_ENV
       
-      - name: 'Dump Short results'
-        run: echo ${{ env.JSON_RESULTS_SHORT }} 
+      # - name: 'Dump Short results'
+      #   run: echo ${{ env.JSON_RESULTS_SHORT }} 
 
-      - name: 'Get Items Ids of Project corresponding to filtered PR'
-        id: fetchId
+      - name: 'Get And set Items Ids of Project corresponding to filtered PR and add labels'
         env:
           GITHUB_TOKEN: ${{ secrets.PR_TOKEN }}
           LABEL_REBASE: "Rebase required"
@@ -196,4 +197,4 @@ jobs:
             result+=("$itemId")
           done
 
-          echo "all item ids: ${result[@]}"
+          echo "all item ids worked upn: ${result[@]}"
