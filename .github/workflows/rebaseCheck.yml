@@ -125,6 +125,7 @@ jobs:
         run: echo ${{ env.JSON_RESULTS_SHORT }} 
 
       - name: 'Get Items Ids of Project corresponding to filtered PR'
+        id: fetchId
         env:
           GITHUB_TOKEN: ${{ secrets.PR_TOKEN }}
         if: ${{ env.PR_LENGTH > 0 }}
@@ -160,20 +161,24 @@ jobs:
 
             itemId=$(jq --argjson nodeId "$nodeId" '.data.node.items.nodes[] | select(.content.id == $nodeId) | .id' items_data.json)
             echo $itemId
-            result+=("$itemId")
+            result+=("$itemId ")
           done
 
           echo "all item ids: ${result[@]}"
-          echo "{\"itemIdList\":${result[@]}}" > itemIdList.json
+          # Format the result array properly
+          formatted_result=$(printf '%s\n' "${result[@]}")
+          echo "{\"itemIdList\":${formatted_result[@]}}" > itemIdList.json
+          echo "::set-output name=formatted_result::$formatted_result"
 
       - name: 'Set above item Id to rebase required in Project'
         env:
           GITHUB_TOKEN: ${{ secrets.PR_TOKEN }}
         if: ${{ env.PR_LENGTH > 0 }}
         run: |
-          jsonData=$(cat itemIdList.json)
-          echo $jsonData
-          itemIds=$(echo $jsonData | jq -c '.itemIdList[]')
-          for itemId in $itemIds; do
-            echo "Processing item $itemId"
-          done
+          echo "The output was ${{ steps.fetchId.outputs.formatted_result }}"
+          # jsonData=$(cat itemIdList.json)
+          # echo $jsonData
+          # itemIds=$(echo $jsonData | jq -c '.itemIdList[]')
+          # for itemId in $itemIds; do
+          #   echo "Processing item $itemId"
+          # done
