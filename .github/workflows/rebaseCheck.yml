@@ -161,7 +161,7 @@ jobs:
 
             itemId=$(jq --argjson nodeId "$nodeId" '.data.node.items.nodes[] | select(.content.id == $nodeId) | .id' items_data.json)
             echo $itemId
-            # #result+=("$itemId")
+            result+=("$itemId")
           done
 
           echo "all item ids: ${result[@]}"
