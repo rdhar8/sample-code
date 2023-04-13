@@ -20,9 +20,7 @@ jobs:
       
       - name: Fetch JIRA Story Details
         run: >-
-                response = curl -u "pratikjagtap010@gmail.com:ATATT3xFfGF0xIT0ocVvN3zz1AurMoJLUgmaIW54Toisf3UFXv12qZVlp1F9Vi5JXWST4xjYrkYXfyBuJwhsuqpr0Wkq764pVUTvPEyG314TkVZKCORhn5QxF5LTxtnkynxEh8TUrD0FnalpV8JNtkhCNA3984SPYtAhJ-2LXltt-9376omNoUA=01A04B76"
+                RESPONSE = curl -u "pratikjagtap010@gmail.com:ATATT3xFfGF0xIT0ocVvN3zz1AurMoJLUgmaIW54Toisf3UFXv12qZVlp1F9Vi5JXWST4xjYrkYXfyBuJwhsuqpr0Wkq764pVUTvPEyG314TkVZKCORhn5QxF5LTxtnkynxEh8TUrD0FnalpV8JNtkhCNA3984SPYtAhJ-2LXltt-9376omNoUA=01A04B76"
                 https://hackthon.atlassian.net/rest/api/latest/issue/${{ (github.event.pull_request.head.ref) }}
-                echo "Project name =>" $response.fields.project.name
-                echo "Sprint name =>" $response.fields.project.customfield_10020[0].name
-                echo "Jira Story Status =>"$response.fields.project.status.name
+                echo $RESPONSE
 
