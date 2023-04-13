@@ -157,8 +157,10 @@ jobs:
 
           for Item in $nodeIds; do
             echo $Item
-            nodeId=$(echo $Item | jq '.["node_id:"]')
-            number=$(echo $Item | jq '.["number:"]')
+            # nodeId=$(echo $Item | jq '.["node_id:"]')
+            # number=$(echo $Item | jq '.["number:"]')
+            node_id=$(echo "$Item" | jq -r '.node_id')
+            number=$(echo "$Item" | jq -r '.number')
             echo "pulling data for nodeId: $nodeId and number: $number"
 
             # itemId=$(jq --argjson nodeId "$nodeId" '.data.node.items.nodes[] | select(.content.id == $nodeId) | .id' items_data.json)
