@@ -156,7 +156,7 @@ jobs:
           for nodeId in $nodeIds; do
 
             echo "pulling data for nodeId: $nodeId"
-            nodeIdTemp=$(jq --arg nodeId "$nodeId" '.data.node.items.nodes[] | select(.content.id == $nodeId)' items_data.json)
+            nodeIdTemp=$(jq --arg nodeId "$nodeId" '.data.node.items.nodes[] | select(.content.id == "PR_kwDOJTKuis5OHoMX")' items_data.json)
             echo $nodeIdTemp
 
             # itemId = $(jq '.data.node.items.nodes[] | select(.content.id == "$nodeId") | .id' items_data.json)
