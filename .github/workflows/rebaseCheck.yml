@@ -136,7 +136,7 @@ jobs:
             query($projectId: ID!) {
               node(id: $projectId){
                 ... on ProjectV2 {
-                  items(first: 50) {
+                  items(first: 200) {
                     nodes{
                       id
                       content{
