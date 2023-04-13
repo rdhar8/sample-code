@@ -75,3 +75,34 @@ jobs:
 
       - name: 'Dump Json results'
         run: echo ${{ env.JSON_RESULTS }} 
+      
+      - name: Get project data
+        env:
+          GITHUB_TOKEN: ${{ secrets.PR_TOKEN }}
+          USER: rdhar8
+          PROJECT_NUMBER: 1
+        run: |
+          gh api graphql -f query='
+            query($user: String!, $number: Int!) {
+              user(login: $user){
+                projectV2(number: $number) {
+                  id
+                  fields(first:50) {
+                    nodes {
+                      ... on ProjectV2Field {
+                        id
+                        name
+                      }
+                      ... on ProjectV2SingleSelectField {
+                        id
+                        name
+                        options {
+                          id
+                          name
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }' -f user=$USER -F number=$PROJECT_NUMBER | jq
