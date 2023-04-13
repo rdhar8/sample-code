@@ -126,8 +126,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.PR_TOKEN }}
         if: ${{ env.PR_LENGTH > 0 }}
         run: |
-          listJson = ${{ toJSON(env.JSON_RESULTS_SHORT) }}
-          for item in "${listJson[@]}"
+          shortList=(${{ env.JSON_RESULTS_SHORT }})
+          for item in "${shortList[@]}"
           do
             echo "Processing item"
             echo "$item"
