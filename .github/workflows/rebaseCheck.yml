@@ -173,7 +173,7 @@ jobs:
         run: |
           jsonData=$(cat itemIdList.json)
           echo $jsonData
-          itemIds=$(echo $jsonData | jq '.itemIdList[]')
+          itemIds=$(echo $jsonData | jq -c '.itemIdList[]')
           for itemId in $itemIds; do
-            echo "$itemId"
+            echo "Processing item $itemId"
           done
