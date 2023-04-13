@@ -164,7 +164,7 @@ jobs:
           done
 
           echo "all item ids: ${result[@]}"
-          echo "{\"itemIdList\":${json_results_short[@]}}" > itemIdList.json
+          echo "{\"itemIdList\":${result[@]}}" > itemIdList.json
 
       - name: 'Set above item Id to rebase required in Project'
         env:
