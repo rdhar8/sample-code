@@ -21,6 +21,6 @@ jobs:
       - name: Fetch JIRA Story Details
         run: >-
                 curl https://hackthon.atlassian.net/rest/api/latest/issue/${{ (github.event.pull_request.head.ref) }}
-                  --user "pratikjagtap010@gmail.com:ATATT3xFfGF0J5IX03RgmuLXDwPAKbQw01z2BiijGfdLlHLIHzhgriSlJweN-QWmzACAmpTWmKzwoL314NR_Tb8eTg78D9r0n7zG4QD51ZncuRtTXTmftaWYwwsbBeG4duCp4fo_MoPXjCxzPBaaatG0RvpZmftHo73GDsnj7g7jZFtD4YxNn5Y=87E2B0FC"
+                  --user "pratikjagtap010@gmail.com:ATATT3xFfGF0xIT0ocVvN3zz1AurMoJLUgmaIW54Toisf3UFXv12qZVlp1F9Vi5JXWST4xjYrkYXfyBuJwhsuqpr0Wkq764pVUTvPEyG314TkVZKCORhn5QxF5LTxtnkynxEh8TUrD0FnalpV8JNtkhCNA3984SPYtAhJ-2LXltt-9376omNoUA=01A04B76"
                   
 
