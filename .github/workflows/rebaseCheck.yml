@@ -58,15 +58,21 @@ jobs:
 
           # Check if results array is empty before formatting as JSON
           if [ ${#results[@]} -eq 0 ]; then
-              echo "No items with mergeability == false"
-              json_results_length=0
+            echo "No items with mergeability == false"
+            json_results_length=0
           else
-              # Use jq to format the results array as a JSON array
-              json_results=$(echo "${results[*]}" | jq -s '.')
-              echo 'JSON_RESULTS='$(echo $json_results) >> $GITHUB_ENV
-              echo "json parsed results"
-              echo "$json_results"
-              json_results_length=$(echo "$json_results" | jq 'length')
+            # Use jq to format the results array as a JSON array
+            json_results=$(echo "${results[*]}" | jq -s '.')
+            echo 'JSON_RESULTS='$(echo $json_results) >> $GITHUB_ENV
+            echo "json parsed results"
+            echo "$json_results"
+
+            json_results_short=$(echo "$json_results" | jq '.[:2]')
+            echo 'JSON_RESULTS_SHORT='$(echo $json_results_short) >> $GITHUB_ENV
+            echo "json short results"
+            echo "$json_results_short"
+            
+            json_results_length=$(echo "$json_results" | jq 'length')
           fi
           echo 'PR_LENGTH='$(echo $json_results_length) >> $GITHUB_ENV
 
@@ -105,4 +111,24 @@ jobs:
                   }
                 }
               }
-            }' -f user=$USER -F number=$PROJECT_NUMBER | jq
+            }' -f user=$USER -F number=$PROJECT_NUMBER > project_data.json
+            echo 'PROJECT_ID='$(jq '.data.user.projectV2.id' project_data.json) >> $GITHUB_ENV
+
+            echo 'STATUS_FIELD_ID='$(jq '.data.user.projectV2.fields.nodes[] | select(.name == "Status").id' project_data.json) >> $GITHUB_ENV
+
+            echo 'STATUS_FIELD_VALUE_REBASE='$(jq '.data.user.projectV2.fields.nodes[] | select(.name == "Status").options[] | select(.name == "Rebase Required").id' project_data.json) >> $GITHUB_ENV
+      
+      - name: 'Dump Short results'
+        run: echo ${{ env.JSON_RESULTS_SHORT }} 
+
+      - name: 'Set Fields For Rebase required'
+        env:
+          GITHUB_TOKEN: ${{ secrets.PR_TOKEN }}
+        if: ${{ env.PR_LENGTH > 0 }}
+        run: |
+          listJson = ${{ toJSON(env.JSON_RESULTS_SHORT) }}
+          for item in "${listJson[@]}"
+          do
+            echo "Processing item"
+            echo "$item"
+          done
