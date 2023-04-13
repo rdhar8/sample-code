@@ -128,9 +128,13 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.PR_TOKEN }}
         if: ${{ env.PR_LENGTH > 0 }}
         run: |
+          echo ${{ steps.filtered_pr.outputs.short_array }}
+          echo "first part"
           shortList=(${{ steps.filtered_pr.outputs.short_array }})
-          for item in "${shortList[@]}"
-          do
-            echo "Processing item"
-            echo "$item"
-          done
+          echo $shortList
+          echo "second part"
+          # for item in "${shortList[@]}"
+          # do
+          #   echo "Processing item"
+          #   echo "$item"
+          # done
