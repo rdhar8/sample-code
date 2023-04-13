@@ -28,6 +28,7 @@ jobs:
           USER: rdhar8
           REPO: sample-code
           GH_TOKEN: ${{ secrets.PR_TOKEN }}
+        id: filtered_pr
         run: |
           json=$(cat prList.json)
           open_items=$(echo "$json" | jq -r '.[] | select(.state == "open") | {url,id,node_id,number,title} | [.url,.id,.node_id,.number,.title] | @csv')
@@ -69,6 +70,7 @@ jobs:
 
             json_results_short=$(echo "$json_results" | jq '.[:2]')
             echo 'JSON_RESULTS_SHORT='$(echo $json_results_short) >> $GITHUB_ENV
+            echo "::set-output name=short_array::${json_results_short[@]}"
             echo "json short results"
             echo "$json_results_short"
             
@@ -126,7 +128,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.PR_TOKEN }}
         if: ${{ env.PR_LENGTH > 0 }}
         run: |
-          shortList=(${{ env.JSON_RESULTS_SHORT }})
+          shortList=(${{ steps.filtered_pr.outputs.short_array }})
           for item in "${shortList[@]}"
           do
             echo "Processing item"
