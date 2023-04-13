@@ -151,7 +151,7 @@ jobs:
           jsonData=$(cat filtered.json)
           nodeIds=$(echo $jsonData | jq -c '.filtered[] | .node_id')
           result=()
-          nodeIdTemp = 0
+          nodeIdTemp = $(echo "Temp")
 
           for nodeId in $nodeIds; do
             echo "pulling data for nodeId: $nodeId"
