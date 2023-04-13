@@ -165,18 +165,18 @@ jobs:
           done
 
           echo "all item ids: ${result[@]}"
-          # Format the result array properly
-          formatted_result=$(printf '%s\n' "${result[@]}")
-          echo "{\"itemIdList\":${formatted_result[@]}}" > itemIdList.json
+          # # Format the result array properly
+          # formatted_result=$(printf '%s\n' "${result[@]}")
+          echo "{\"itemIdList\":${result[@]}}" > itemIdList.json
 
-      - name: 'Set above item Id to rebase required in Project'
+      - name: 'Set above item Ids to rebase required in Project'
         env:
           GITHUB_TOKEN: ${{ secrets.PR_TOKEN }}
         if: ${{ env.PR_LENGTH > 0 }}
         run: |
           cat itemIdList.json
-          # jsonData=$(cat itemIdList.json)
-          # echo $jsonData
+          jsonData=$(cat itemIdList.json)
+          echo "json data $jsonData"
           # itemIds=$(echo $jsonData | jq -c '.itemIdList[]')
           # for itemId in $itemIds; do
           #   echo "Processing item $itemId"
