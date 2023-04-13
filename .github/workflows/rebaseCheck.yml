@@ -129,13 +129,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.PR_TOKEN }}
         if: ${{ env.PR_LENGTH > 0 }}
         run: |
-          cat filtered.json
-          # shortList=$(cat filtered.json | jq -r '.filtered[]' | {url,id,node_id,number,title} | [.url,.id,.node_id,.number,.title] | @csv')
-          # while IFS=',' read -ra item; do
-          #   url=${item[0]}
-          #   id=${item[1]}
-          #   node_id=${item[2]}
-          #   number=${item[3]}
-          #   title=${item[4]}
-          #   echo "Processing url $url"
-          # done <<< "$shortList"
+          jsonData=$(cat filtered.json)
+          urls=$(echo $jsonData | jq -c '.filtered[] | .url')
+          for url in $urls; do
+            echo "$url"
+          done
