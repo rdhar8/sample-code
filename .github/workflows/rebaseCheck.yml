@@ -63,6 +63,7 @@ jobs:
           else
               # Use jq to format the results array as a JSON array
               json_results=$(echo "${results[*]}" | jq -s '.')
+              echo 'JSON_RESULTS='$(echo $json_results) >> $GITHUB_ENV
               echo "json parsed results"
               echo "$json_results"
               json_results_length=$(echo "$json_results" | jq 'length')
@@ -71,3 +72,6 @@ jobs:
 
       - name: 'Dump Merge conflicts pr length'
         run: echo ${{ env.PR_LENGTH }} 
+
+      - name: 'Dump Json results'
+        run: echo ${{ env.JSON_RESULTS }} 
