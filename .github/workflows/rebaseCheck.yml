@@ -172,7 +172,8 @@ jobs:
         if: ${{ env.PR_LENGTH > 0 }}
         run: |
           jsonData=$(cat itemIdList.json)
-          itemIds=$(echo $jsonData | jq -c '.itemIdList[]')
+          echo $jsonData
+          itemIds=$(echo $jsonData | jq '.itemIdList[]')
           for itemId in $itemIds; do
             echo "$itemId"
           done
