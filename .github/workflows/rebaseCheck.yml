@@ -1,0 +1,200 @@
+name: Check if other PRs can be merged
+on:
+  pull_request:
+    types:
+      - closed
+jobs:
+  if_merged:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    steps:
+      - name: 'Dump github content'
+        run: echo '${{ toJSON(github.event) }}' | jq
+        shell: bash
+
+      - name: 'Pull all PRs that are in open state'
+        env:
+          USER: rdhar8
+          REPO: sample-code
+          GH_TOKEN: ${{ secrets.PR_TOKEN }}
+        run: |
+          gh api -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" /repos/${{ env.USER }}/${{ env.REPO }}/pulls > prList.json
+
+          jq '.[] | select(.state == "open") | {url,id,node_id,number,title}' prList.json > filteredList.json
+
+      - name: 'Dump Filtered List'
+        run: cat filteredList.json
+
+      - name: 'Make GET request to every PR in open State and check for   mergeable attribute'
+        env:
+          USER: rdhar8
+          REPO: sample-code
+          GH_TOKEN: ${{ secrets.PR_TOKEN }}
+        id: filtered_pr
+        run: |
+          json=$(cat prList.json)
+          open_items=$(echo "$json" | jq -r '.[] | select(.state == "open") | {url,id,node_id,number,title} | [.url,.id,.node_id,.number,.title] | @csv')
+          echo "${open_items[@]}"
+          echo "complete"
+          results=()
+          while IFS=',' read -ra item; do
+            url=${item[0]}
+            id=${item[1]}
+            node_id=${item[2]}
+            number=${item[3]}
+            title=${item[4]}
+
+            echo "Processing url $url"
+
+            result=$( gh api -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" /repos/${{ env.USER }}/${{ env.REPO }}/pulls/$number )
+
+            mergable=$(echo "$result" | jq -r '.mergeable')
+            if [ "$mergable" = true ]; then
+              echo "Item $id is mergable"
+            else
+              echo "Item $id is not mergable"
+              results+=( "$(echo "{\"url\": $url, \"id\": $id, \"node_id\": $node_id, \"number\": $number, \"title\": $title }")")
+            fi
+          done <<< "$open_items"
+          echo "completed processing"
+          echo $results
+
+          # Check if results array is empty before formatting as JSON
+          if [ ${#results[@]} -eq 0 ]; then
+            echo "No items with mergeability == false"
+            json_results_length=0
+          else
+            # Use jq to format the results array as a JSON array
+            json_results=$(echo "${results[*]}" | jq -s '.')
+            echo 'JSON_RESULTS='$(echo $json_results) >> $GITHUB_ENV
+            echo "json parsed results"
+            echo "$json_results"
+
+            # json_results_short=$(echo "$json_results" | jq '.[:2]')
+            # echo 'JSON_RESULTS_SHORT='$(echo $json_results_short) >> $GITHUB_ENV
+            # echo "json short results"
+            # echo "$json_results_short"
+
+            echo "{\"filtered\":${json_results[@]}}" > filtered.json
+            
+            json_results_length=$(echo "$json_results" | jq 'length')
+          fi
+          echo 'PR_LENGTH='$(echo $json_results_length) >> $GITHUB_ENV
+
+      - name: 'Dump Merge conflicts pr length'
+        run: echo ${{ env.PR_LENGTH }} 
+
+      - name: 'Dump Json results'
+        run: echo ${{ env.JSON_RESULTS }} 
+      
+      - name: Get project data
+        env:
+          GITHUB_TOKEN: ${{ secrets.PR_TOKEN }}
+          USER: rdhar8
+          PROJECT_NUMBER: 1
+        run: |
+          gh api graphql -f query='
+            query($user: String!, $number: Int!) {
+              user(login: $user){
+                projectV2(number: $number) {
+                  id
+                  fields(first:50) {
+                    nodes {
+                      ... on ProjectV2Field {
+                        id
+                        name
+                      }
+                      ... on ProjectV2SingleSelectField {
+                        id
+                        name
+                        options {
+                          id
+                          name
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }' -f user=$USER -F number=$PROJECT_NUMBER > project_data.json
+            echo 'PROJECT_ID='$(jq '.data.user.projectV2.id' project_data.json) >> $GITHUB_ENV
+
+            echo 'STATUS_FIELD_ID='$(jq '.data.user.projectV2.fields.nodes[] | select(.name == "Status").id' project_data.json) >> $GITHUB_ENV
+
+            echo 'STATUS_FIELD_VALUE='$(jq '.data.user.projectV2.fields.nodes[] | select(.name == "Status").options[] | select(.name == "Rebase Required").id' project_data.json) >> $GITHUB_ENV
+      
+      # - name: 'Dump Short results'
+      #   run: echo ${{ env.JSON_RESULTS_SHORT }} 
+
+      - name: 'Get And set Items Ids of Project corresponding to filtered PR and add labels'
+        env:
+          GITHUB_TOKEN: ${{ secrets.PR_TOKEN }}
+          LABEL_REBASE: "Rebase required"
+        if: ${{ env.PR_LENGTH > 0 }}
+        run: |
+          gh api graphql -f query='
+            query($projectId: ID!) {
+              node(id: $projectId){
+                ... on ProjectV2 {
+                  items(first: 200) {
+                    nodes{
+                      id
+                      content{
+                        ...on PullRequest {
+                          id
+                          title
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }' -f projectId=$PROJECT_ID > items_data.json
+
+          jsonData=$(cat filtered.json)
+          nodeIds=$(echo $jsonData | jq -c '.filtered[] | {node_id,number}')
+          echo $nodeIds
+          result=()
+
+          for Item in $nodeIds; do
+            nodeId=$(echo "$Item" | jq '.node_id')
+            number=$(echo "$Item" | jq -r '.number')
+            echo "pulling data for nodeId: $nodeId and pr number: $number"
+
+            itemId=$(jq --argjson nodeId "$nodeId" '.data.node.items.nodes[] | select(.content.id == $nodeId) | .id' items_data.json)
+            echo $itemId
+
+            #Send request to update status to rebase required
+            gh api graphql -f query='
+            mutation (
+              $project: ID!
+              $item: ID!
+              $status_field: ID!
+              $status_value: String!
+            ) {
+              set_status: updateProjectV2ItemFieldValue(input: {
+                projectId: $project
+                itemId: $item
+                fieldId: $status_field
+                value: {
+                  singleSelectOptionId: $status_value
+                  }
+              }) {
+                projectV2Item {
+                  id
+                  }
+              }
+            }' -f project=$PROJECT_ID -f item=$itemId -f status_field=$STATUS_FIELD_ID -f status_value=${{ env.STATUS_FIELD_VALUE }}
+
+            curl -L -S \
+            -X POST \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer ${{ env.GITHUB_TOKEN }}"\
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            "https://api.github.com/repos/rdhar8/sample-code/issues/$number/labels" \
+            -d '{"labels":["Rebase required"]}'
+
+            result+=("$itemId")
+          done
+
+          echo "all item ids worked upn: ${result[@]}"
