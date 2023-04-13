@@ -46,7 +46,7 @@ jobs:
             result=$( gh api -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" /repos/${{ env.USER }}/${{ env.REPO }}/pulls/$number )
 
             mergable=$(echo "$result" | jq -r '.mergeable')
-            if [ "$mergable" = "true" ]; then
+            if [ "$mergable" = true ]; then
               echo "Item $id is mergable"
             else
               echo "Item $id is not mergable"
