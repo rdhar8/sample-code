@@ -151,13 +151,10 @@ jobs:
           jsonData=$(cat filtered.json)
           nodeIds=$(echo $jsonData | jq -c '.filtered[] | .node_id')
           result=()
-          nodeIdTemp=$(echo "1")
 
           for nodeId in $nodeIds; do
             echo "pulling data for nodeId: $nodeId"
-            nodeIdTemp=$(echo "$nodeId")
-            echo $nodeIdTemp
-            jq --arg nodeId "$nodeId" '.data.node.items.nodes[] | select(.content.id == $nodeId) | .id' items_data.json
+            jq -r --arg nodeId "$nodeId" '.data.node.items.nodes[] | select(.content.id == $nodeId) | .id' items_data.json
             # itemId = $(jq '.data.node.items.nodes[] | select(.content.id == "$nodeId") | .id' items_data.json)
             # echo "item id received"
             # echo "$itemId"
