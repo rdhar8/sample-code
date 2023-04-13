@@ -7,17 +7,7 @@ on:
 jobs:
   jira_story_details:
     runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-      
-      - name: Install JIRA CLI
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y curl
-          curl -L "https://github.com/clearvision/jira-cli/releases/download/3.9.0/jira-linux-amd64" -o /usr/local/bin/jira
-          chmod +x /usr/local/bin/jira
-      
+ 
       - name: Fetch JIRA Story Details
         run: >-
                 curl -u "pratikjagtap010@gmail.com:ATATT3xFfGF0xIT0ocVvN3zz1AurMoJLUgmaIW54Toisf3UFXv12qZVlp1F9Vi5JXWST4xjYrkYXfyBuJwhsuqpr0Wkq764pVUTvPEyG314TkVZKCORhn5QxF5LTxtnkynxEh8TUrD0FnalpV8JNtkhCNA3984SPYtAhJ-2LXltt-9376omNoUA=01A04B76"
